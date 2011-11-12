@@ -1,0 +1,10 @@
+---
+layout: post
+title: Welcome to Index Nirvana
+---
+
+h1. {{page.title}}
+
+p(meta). November 11 2011 - Seattle, WA
+
+This is my first post - some real stuff is gonna go here soon
