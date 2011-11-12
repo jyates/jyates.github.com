@@ -18,4 +18,9 @@ This blog can be tested by running:
 The site can then be seen at:
 http://0.0.0.0:4000
 
-
+## Credits ##
+=============
+Images from:
+http://www.openclipart.org/people/docguy/docGuy_Page.svg
+http://2b.img.v4.skyrock.net/2b4/emotentation/pics/2570521967_0_9_VOqH0G38.png
+http://www.ettoredelnegro.me/images/github_button.png
