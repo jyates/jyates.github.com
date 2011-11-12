@@ -8,3 +8,8 @@ h1. {{page.title}}
 p(meta). November 11 2011 - Seattle, WA
 
 This is my first post - some real stuff is gonna go here soon
+{% highlight java %}
+
+public static void main(String [] args)
+
+{% endhighlight %}
