@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Welcome to Index Nirvana
+title: Welcome to My Blog
 ---
 
 h1. {{page.title}}
