@@ -101,7 +101,7 @@ If you don’t want to use straight Java to interact with the index, Culvert als
 
 And that is really all there is to using Culvert! 
 
-I'm continuing the Culvert series with a more in-depth look at the underlying architecture. We'll be examining some of core components and how all the pieces fit together.
+I'm thinking about continuing the Culvert series with a more in-depth look at the underlying architecture - really examining some of core components and how all the pieces fit together. In the mean time, if you are interested in learning about how it works under the hood, you can see the original talk from [Hadoop Summit 2011] (http://www.slideshare.net/jesse_yates/culvert-a-robust-framework-for-secondary-indexing-of-structured-and-unstructured-data)
 
 The code is available on [gituhub] (www.github.com/booz-allen-hamilton/culvert). Feel free to check it out, provide feedback, and if you are feeling really generous, contribute some code :)
 
