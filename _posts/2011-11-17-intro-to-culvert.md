@@ -16,49 +16,49 @@ Ok, at this point I'll assume that (1) you know what [secondary indexing] is and
 Lets start with how you can actually get a Culvert client up and running. Turns out its pretty simple. 
 
 We are going to use an example of connecting to an Accumulo Database:
-<pre>
-// start configuring how to connect to the instance
-Configuration conf = new Configuration();
-conf.set(AccumuloConstants.INSTANCE_CLASS_KEY, ZooKeeperInstance.class.getName());
-conf.set(AccumuloConstants.INSTANCE_NAME_KEY, INSTANCE_NAME);
-// set all your other configuration values
-...
-// create the database adapter with a configuration
-DatabaseAdapter database = new AccumuloDatabaseAdapter();
-database.setConf(conf);
-// create a client to configure
-Client client = new Client(CConfiguration.getDefault());
-//setup the client to talk to your database
-Client.setDatabase(database, client.getConf());
-</pre>
+
+
+	// start configuring how to connect to the instance
+	Configuration conf = new Configuration();
+	conf.set(AccumuloConstants.INSTANCE_CLASS_KEY, ZooKeeperInstance.class.getName());
+	conf.set(AccumuloConstants.INSTANCE_NAME_KEY, INSTANCE_NAME);
+	// set all your other configuration values
+	...
+	// create the database adapter with a configuration
+	DatabaseAdapter database = new AccumuloDatabaseAdapter();
+	database.setConf(conf);
+	// create a client to configure
+	Client client = new Client(CConfiguration.getDefault());
+	//setup the client to talk to your database
+	Client.setDatabase(database, client.getConf());
+{:java}
 
 That wasn’t too bad, right? At this point we’ve got a client to talk to the database. Since you are using Culvert is for indexing, the next thing you would want to do is add an index. Its actually pretty simple programmatically:
 
-<pre>
-// create term-based index: index each of the words in the value, where the
-// row key is the word and the row id is stored in the rest of the key
-Index index = new TermBasedIndex(INDEX_NAME, database, PRIMARY_TABLE_NAME,
-INDEX_TABLE_NAME, COLUMN_FAMILY_TO_INDEX, COLUMN_QUALIFIER_TO_INDEX);
-// other index definitions could also be loaded from the configuration
-...
-// and programmatically add the index to the client's configuration
-client.addIndex(index);
-</pre>
+	// create term-based index: index each of the words in the value, where the
+	// row key is the word and the row id is stored in the rest of the key
+	Index index = new TermBasedIndex(INDEX_NAME, database, PRIMARY_TABLE_NAME,
+		INDEX_TABLE_NAME, COLUMN_FAMILY_TO_INDEX, COLUMN_QUALIFIER_TO_INDEX);
+	// other index definitions could also be loaded from the configuration
+	...
+	// and programmatically add the index to the client's configuration
+	client.addIndex(index);
+{:java}
 
 Its important to note that each index needs to be given a unique name, otherwise namespace conflicts will occur. But generally this is not a problem and it useful when you want to have more than one index of the same type (eg. You want to do a TermBasedIndex on two different tables, two different fields, two different whatever).
 
 You can also save yourself some effort by setuping your indexes in the configuration – the client will pick these up when it starts and automatically make sure the indexes you specified are used.
  
 Once you have the client setup and all the indexes specified, the next step is to put data in the table. All data is wrapped as the high level Culvert type key and value - a CKeyValue. A CKeyValue is then transformed into the correct key and value for the underlying database.  This makes doing an insert very similar to how inserts are done already in a BigTable system:
-<pre>
-// build the list of values to insert
-List valuesToPut = Lists.newArrayList(new CKeyValue("foo"
-      .getBytes(), "bar".getBytes(), "baz".getBytes(), "value".getBytes()));
-//wrap them in a put
-Put put = new Put(valuesToPut);
-//and just make the put
-client.put(PRIMARY_TABLE, put);
-</pre>
+
+	// build the list of values to insert
+	List valuesToPut = Lists.newArrayList(new CKeyValue("foo"
+	      .getBytes(), "bar".getBytes(), "baz".getBytes(), "value".getBytes()));
+	//wrap them in a put
+	Put put = new Put(valuesToPut);
+	//and just make the put
+	client.put(PRIMARY_TABLE, put);
+{:java}
 
 Pretty simple, right? Not only are these items being inserted into the database, Culvert also takes care of all the heavy lifting for you of make sure those values get indexed by all the indexes you have added to the client.
 
@@ -67,13 +67,13 @@ Secondary indexes are only useful if you can actually access the data. Culvert a
 For those interested, we used the decorator design pattern here to make it really easy to that nesting. Every constraint takes another constraint and some parameters.
 
 Querying your data back out using the indexes is a little bit more complex as you have to build up your constraints but once you pick up the general strategy, it isn’t too bad. Lets start with just doing a simple query of the index looking for any records that have the word “value” in them:
-<pre>
-Index c1Index = client.getIndexByName(INDEX_NAME);
-Constraint c1Constraint = new RetrieveColumns(new IndexRangeConstraint(
-     c1Index, new CRange("value".getBytes())), c1Index.getPrimaryTable());
-// check the first constraint
-SeekingCurrentIterator iter = c1Constraint.getResultIterator();
-</pre>
+
+	Index c1Index = client.getIndexByName(INDEX_NAME);
+	Constraint c1Constraint = new RetrieveColumns(new IndexRangeConstraint(
+	     c1Index, new CRange("value".getBytes())), c1Index.getPrimaryTable());
+	// check the first constraint
+	SeekingCurrentIterator iter = c1Constraint.getResultIterator();
+{:java}
 
 First, we get the index out of the client that you want to use when querying (to make sure you are searching for the right field). Then you build a constraint to use as a query. 
 
@@ -88,10 +88,10 @@ Now consider a little bit more complex case – doing an AND between the results
 <img src="/images/posts/intro-culvert/and.png">
 
 Each side of the AND is streamed back to the AND logic on the client, where we can decide which rows to keep and which rows to discard. Note here that Culvert is leveraging the fact that the BigTable model enforces that from each TableServer or RegionServer will returned ordered results, so all we need to do is make sure we match the right results up. Here is the code to do an index based AND:
-<pre>
-Constraint and = new And(c1Constraint, c2Constraint);
-iter = and.getResultIterator();
-</pre>
+
+	Constraint and = new And(c1Constraint, c2Constraint);
+	iter = and.getResultIterator();
+{:java}
 
 In the beginning lets assume that you already have the Constraints for each side of the AND based on the index you want to search (just like we did before)
 

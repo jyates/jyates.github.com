@@ -14,13 +14,27 @@ ul.posts li {
 	font-family: Monaco, "Courier New", monospace;
 	font-size: 80%;
 }
-
 /************************************************
 Site blocks
 ************************************************/
+.site {
+  font-size: 110%;
+  text-align: justify;
+  width: 40em;
+  margin: 3em auto 2em auto;
+  line-height: 1.5em;
+}
 
-
-/************************************************************************** Posts
+.site .footer {
+    font-size: 80%;
+    color: #666;
+    border-top: 4px solid #eee;
+    margin-top: 2em;
+    overflow: hidden;
+		text-align: center;
+  }
+/************************************************************************** 
+Posts
 /**************************************************************************/
 
 #post {
