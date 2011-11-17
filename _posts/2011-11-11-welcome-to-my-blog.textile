@@ -5,11 +5,10 @@ title: Welcome to My Blog
 
 h1. {{page.title}}
 
-p(meta). November 11 2011 - Seattle, WA
+p(meta). November 11, 2011 - Seattle, WA
 
-This is my first post - some real stuff is gonna go here soon
-{% highlight java %}
+Hi, I'm Jesse. If you are reading this, you probably got here after reading one of my other posts. Congratulations on being one of the few people compelled to read _everything_. 
 
-public static void main(String [] args)
+In case you haven't gathered from some of the posts here, I really like playing with Big Data. As in, I really believe it can change (is changing?) the world. Right now I'm working on a way do that, but more on that later - let's just call it in 'stealth mode'.
 
-{% endhighlight %}
+So if you like hearing about big data, cloud, programming, entrepreneurism, and  (among other things) general nerding out, stick around!
