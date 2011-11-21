@@ -103,8 +103,8 @@ And that is really all there is to using Culvert!
 
 I'm thinking about continuing the Culvert series with a more in-depth look at the underlying architecture - really examining some of core components and how all the pieces fit together. In the mean time, if you are interested in learning about how it works under the hood, you can see the original talk from [Hadoop Summit 2011] (http://www.slideshare.net/jesse_yates/culvert-a-robust-framework-for-secondary-indexing-of-structured-and-unstructured-data)
 
-The code is available on [gituhub] (www.github.com/booz-allen-hamilton/culvert). Feel free to check it out, provide feedback, and if you are feeling really generous, contribute some code :)
+The code is available on [gituhub] (http://www.github.com/booz-allen-hamilton/culvert). Feel free to check it out, provide feedback, and if you are feeling really generous, contribute some code :)
 
-[previous post]: 2011/11/16/filling-in-the-gaps.html
+[previous post]: /2011/11/16/filling-in-the-gaps.html
 [secondary indexing]: http://en.wikipedia.org/wiki/Ingres_%28database%29#Indexes
 
