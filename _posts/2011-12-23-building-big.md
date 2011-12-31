@@ -8,32 +8,51 @@ title: Building Big
 
 December 25, 2011 - Gaithersburg, MD
 
-A lot of this post is based on my recent discussions with a few companies in the bay area who are 'changing the paradigm'. Ok, what they are really doing is moving to a cloud infrastructure. But in a world domainated by SQL and big metal, this is seriously changing how people are running their backends.
+A lot of this post is based on my recent discussions with a few companies in the bay area who are 'changing the paradigm'. Ok, what they are really doing is moving to a cloud infrastructure. But in a world domainated by SQL and big iron, it has to change how people run their backend.
 
 Along with this change comes the issue how to build these massive systems. And then how to make them go fast. And _then_, once you have all of that, you need to make sure multiple products within your company can actually use this stuff. We'll talk about each of these in turn.
 
 ## Make sure you have a problem
 
-I can't stress this enough. It's an epidemic among engineers that we build these massive systems that no one needs or cares about. And they end up sucking. Any time you are building something new, you need to really make sure that you need what you are building. Here is where Eric Reis's [The Lean Startup] makes a ton of sense - talk to people who are going to use you backend, figure out what their _problems_ are - _not_ what they want to do with your technology. When they 
+I can't stress this enough. It's an epidemic among engineers that we build these massive systems that no one needs or cares about. And they end up sucking. 
+
+Any time you are building something new, you need to really make sure that you need what you are building. Here is where Eric Reis's [The Lean Startup] makes a ton of sense - talk to people who are going to use you backend, figure out what their _problems_ are - _not_ what they want to do with your technology. It's about building in that feedback loop from the beginning. This also works really well with traditional agile methodolgies - get feedback from the 'client' and iterate based on their responses. 
 
 ## Building from scratch
 
-One of my favorite types of interview questions is the "design a system to do X", where X is a thing to run at massive scale. I like this question for two reasons. First, because it gives you real insight into a how a person thinks about things, particularly if you are hiring for building big, scalable systems. What do they worry about? What do they rely on the technology for? And most importantly, what kind of process do they use to solve a real problem? Oh right, the key here is that you give them a real problem (see above), or its hard to really get a good answer.
+One of my favorite types of interview questions is the "design a system to do X", where X is a general goal, which has to run at massive scale; bonus points if it is something you are actually building now or have had to build. I like this question for two reasons. First, because it gives you real insight into a how a person thinks about doing the exact things you are _already_ building. What do they worry about? What do they rely on the technology for? And most importantly, what kind of process do they use to solve a real problem? 
 
-The other reason I like that kind of question is that its pretty close to how you are going to architect the solutions to your own problems (or at least it should be). Step 1: I have to solve this problem, meet this SLA, support this application. Step 2: ?. Step 3: profit. Its the '?' thats the fun part. And you can do it pretty easily - start with the dumb solution, then start removing/replacing things following the principles below and you will end up with a scalable system that actually solves the problem.
+The other reason I like that kind of question is that its pretty close to how you are going to architect the solutions to your own problems (or at least it should be). 
 
-You might stumble across the right solution by taking the dumb one and iterating on it as a physical product, hammering it until it breaks, fixing the broken stuff and then repeat.  However, without designing the scale from the start, you get locked into a product that is inherently built to _not_ scale.
+Step 1: I have to solve this problem, meet this SLA, support this application. 
 
-Once you know you have a problem to solve, you can just start beating on it and doing whiteboard iterations.
- 
+Step 2: ?. 
+
+Step 3: profit. 
+
+Turns out the '?' is the fun part. Whiteboard iteration works really well here - they cost you only a couple of hours, but help you refine to a solution to meet your general design goals. Once you have that, you can actually start building and see what breaks.
+
+First, start with the dumb solution - it doesn't scale, single points of failure, basically the works. Then start removing/replacing things following the principles below and you will end up with a scalable system that actually solves the problem. But the point is that it will work (theoretically). From there, you can refine for certain properties - scale, fault tolerance, security, etc. The beauty here is that you can literally scrap the entire design so far if it doesn't conform to what you need (and you shoudn't be afraid to erase everything) since it is the swipe of an eraser, rather than huge swaths of code. 
+
+You might stumble across the right solution by taking the dumb one and iterating on it as a physical product, hammering it until it breaks, fixing the broken stuff and then repeat.  However, without designing the scale from the start, you get locked into a product that is inherently built to _not_ scale. 
+
+Its always much harder to destroy things that you spent blood and sweat on rather than some drawings on a whiteboard. However, once you are actually using a system it can turn out that you didn't account for all the use cases or things didn't work quite as you expected; then, you can't be afraid to lay waste to huge swaths of code or even rewrite everything (assuming you have time). 
+
 ###Design it right the first time (or scrap it and try again)
-This is a big part of why MongoDB isn't really a cloud-scale database; it was designed as a single-server NoSQL database (don't get me started on why NoSQL != cloud), and then had sharding and 'scalability' slapped on later. This lead to a series of really painful 'features' (lack of good monitoring, manual restarts and re-partitioning on failure, collections don't shard, etc) that are not really core to the how the system was originally designed and flounder because they break the original paradigm.
 
-When you start diverging from the original intentions of a system, be it a database, a product, etc, you need to seriously consider if the original design of that system is sufficient; chances are that after pivoting they aren't. And there are the traditional danger signs for these things - rewriting massive pieces, constant bugs in certain areas, 'dirty' hacks. Once you start building up enough indicators, it is then time to consider doing a massive rewrite - what you are pivoting the system on is longer solid ground, but instead has become a unstable, uncertain bog that doesn't quite do what you want it to and no longer performs the original intention nearly as well as it used to. 
+Let's take a look at an example that has seem some controversy recently: MongoDB. I'll readily admit that there are a lot of benefits of the system - its wicked easy to use, it integrates easily, schemaless as expressive as necessary, and it handles a lot of annoying things for you. 
 
-You need to consider a simple set of basic princples you are building your system to support and then designing for that. Another case is adding security into Hadoop - a freaking mess. On the flip side is security and scale in Accumulo; it had two basic goals and it does those two things pretty well (not saying anything about the quality of the code...).
+However, what Mongo isn't is a _cloud-scale database_. From the start, it was designed as a single-server NoSQL database (don't get me started on why NoSQL != cloud) when then adding sharding and 'scalability' on later. This lead to data loss in some cases and a set of really painful 'features' - lack of good monitoring, manual restarts and re-partitioning on failure, collections don't shard, etc. These added properties were not designed into the system from the start - they break the original paradigm and really need a system redesign to be done 'properly'.
+
+Another case is adding security into Hadoop - a freaking mess. On the flip side is security and scale in Accumulo; it had two basic goals and it does those two things pretty well (not saying anything about the quality of the code...).
+
+When you start diverging from the original intentions of a system, be it a database, a product, etc, you need to seriously consider if the original design of that system is sufficient; chances are that after pivoting they aren't quite right. Thankfully, there are the traditional danger signs for these things - rewriting massive pieces, constant bugs in certain areas, 'dirty' hacks. 
+
+Once you start accumulating enough indicators (this is a feel thing), it's  time to consider doing a massive rewrite. What you are pivoting the system on is longer solid, but instead has become a unstable, uncertain bog that doesn't quite do what you need and also doesn't do the original purpose. 
 
 ##General principles:
+When doing the original design, or a rewrite, there are certain properties you need to make sure a built into the system from that start. Otherwise, its going to be huge pain later or just be duck-taped together. 
+
 ### 1. No single points of failure
 
 This has been the bane of the Hadoop stack for years now and mountains of work have gone into making a high-availabilty namenode. Multiple companies have roled their own solutions because they realized that if shit goes down and their namenode crashes, so does their business. So that can't happen. And look at MapR - they are killing it right now because they did a great implementation and make it plug-and-play (more or less) for enterprise. This is really closer to the way things need to be; its what Oracle has become and part of why Apple is great: _it just works_. 
@@ -59,7 +78,7 @@ Yes, there will be some overlap, but that why you have your architects meet regu
 
 What we end up with then is a trend upward in services that are tightly coupled, but general enough that people can build new things on them. Combined with a culture of collaboration, this leads to new tools built with the understanding that it may, one day, be scrapped and rebuilt the 'right way'. 
 
-#### Do the right thing
+### 4. Do the right thing
 A recent methodology I like is following a server-based approach using apis. Essentially you can get a bunch of servers that will respond to a given api, and you don't worry about how they do it on the backend - you could even make them part of the bigger cluster so you can share basic admin costs (nudge, nudge, wink, wink)!  This means each product claims ownership (to a degress) over all the tools to build their product. This gives you a vertical integration from the bare metal up to the product/service that leads to great products. If you can fine tool how your database works, then you can make your app exceedingly fast. If you can make the data storage intuitve within the app context, then the platform people can iterate fast. Everything just starts to click.
 
 This type of setup starts to get really bad-ass when you can start doing automated deployments over a shared cluster. Using things like [Chef] and [Mesos] combined with some automated cluster load monitoring. All of a sudden you can roll out pieces of your backend as you need it, have it humming along and configured correctly right away, and if you design correctly, will ensure linear(ish) scalabilty.
@@ -94,7 +113,7 @@ If you aren't don't run whatever you are building at scale, you are building a t
 
 This means getting your stuff into production as fast a possible (again, following Reis's advice) because it will show you where your shit breaks. This is a good thing, because those points make it 
 
-You will see what features people are using -  hopefully, you only have one or two and got those from talking to the platform people who need your system.
+You will see what features people are using -  hopefully, you only have one or two and got those from talking to the platform people who need your system. Once you have something people will use, you are already on the way to doing good horizontal-vertical integration of the different tool sets.  
 
 
 [The Lean Startup]: http://
