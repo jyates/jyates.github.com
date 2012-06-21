@@ -13,11 +13,13 @@ As of HBase v0.96 (currently trunk), one can now get a reference to a table in t
 
 The HBase shell is actually a specialized jruby REPL, preloaded with a bunch of specialized HBase functionality. One of the things that always bothered me about the shell was that evn though Ruby is object-oriented AND HTables are objects, _you couldn't get a reference to an HTable_, you had to use the top-level put, get, scan, etc. methods and specify the table name _each time_. A typical test that the shell is working, might look something like this:
 
-<pre><code>hbase> create 't1', {NAME => 'f1', VERSIONS => 5}
+{% highlight bash %}
+hbase> create 't1', {NAME => 'f1', VERSIONS => 5}
 hbase> put 't1', 'x', 'f1', 'v'
 hbase> scan 't1'
 hbase> disable 't1'
-hbase> drop 't1'</code></pre>
+hbase> drop 't1'
+{% endhighlight %}
 
 In this little test, you are doing the following:
 1. create a table named 't1' with the column family 'f1' and keeping 5 versions
@@ -30,34 +32,35 @@ Anything in there seem really redundant? Accumulo solves this by have a 'table c
 
 Instead, in HBase we use a table reference which lets you use all the commands without having to worry about context and at the same time simpliying manipulating tables. To do the same test as before,  but with a lot less effort (especially with longer named tables) you can do the following:
 
-<pre><code>hbase> t =  create 't1', {NAME => 'f1', VERSIONS => 5}
+{% highlight bash %}
+hbase> t =  create 't1', {NAME => 'f1', VERSIONS => 5}
 hbase> t.put 'x', 'f1', 'v'
 hbase> t.scan
 hbase> t.disable
-hbase> t.drop </code></pre>
+hbase> t.drop{% endhighlight %}
 
 What is really neat is the addition of the 'get a table' functionality. If you have already created a table, say named 't1', the above example could look something like:
 
-<pre><code>hbase> t =  get_table 't1'
+{% highlight bash %}hbase> t =  get_table 't1'
 hbase> t.put 'x', 'f1', 'v'
-...</code></pre>
+...{% endhighlight %}
 
 Any of the more complex invocations of the table methods (get, put, etc) also work on the table reference - just like you would expect!
 
  To get more information on how to use that command, you can use either:
 
-<pre><code>hbase> help 'put'</code></pre>
+{% highlight bash %}hbase> help 'put'{% endhighlight %}
 
 OR if you have a reference to a table,
 
-<pre><code>hbase> t.help 'put'</code></pre>
+{% highlight bash %}hbase> t.help 'put'{% endhighlight %}
 
 Similarly, to get general help for a table, you can:
-<pre><code>hbase> table_help</code></pre>
+{% highlight bash %}hbase> table_help{% endhighlight %}
 
 OR if you have a reference to a table,
 
-<pre><code>hbase> t.help </code></pre>
+{% highlight bash %}hbase> t.help {% endhighlight %}
 
 Note that table references also will also you to tab-complete the manipulations on the table reference. One of the great advantages of using the ruby REPL and a real Table object. 
 

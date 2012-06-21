@@ -74,9 +74,10 @@ Keep a separate site-cookbooks for your own cookbooks. Its mentioned in the chef
 
 Adding them to vagrant is as easy as adding the following to your Vagrantfile:
 
-<code>
+{% highlight bash %}
 chef.cookbooks_path = ["chef-repo/cookbooks", "chef-repo/site-cookbooks"]
-</code> 
+{% endhighlight %}
+
 
 All the regular (external) cookbooks that you pulled down from various open source repositories should go into chef-repo/cookbooks. Then everything that you write should go into chef-repo/site-cookbookbooks. That way you know which things came from where and who tell email if things start breaking.
 
@@ -93,20 +94,22 @@ Do the right thing.
 ### Managing packages
 
 For some reason, the 'package' command in chef doesn't always work well in vagrant. Chef runs under the vagrant user, rather than root, so anything that requires super-user powers, needs to be handcoded. So to install emacs, you can't just do:
-<code><pre>
+{% highlight bash %}
 package "emacs" do
 	action :install
-end</pre></code>
+end
+{% endhighlight  %}
 
 But instead have to do (assuing your are on a debian system, adjust for you own package manager):
-<code><pre>
+{% highlight bash %}
 bash "install emacs" do
   user "root"
   code &lt&lt-EOH
   apt-get update
   apt-get install -y -q emacs
   EOH
-end</pre></code>
+end
+{% endhighlight %}
 
 Here, we are essentially just running a shell command, as root, that (1) updates the apt-get repository and then (2) will install emacs.
 

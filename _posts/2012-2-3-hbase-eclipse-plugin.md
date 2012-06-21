@@ -35,8 +35,10 @@ Ususally this wouldn't be a problem, but since m2eclipse is built into Eclipse, 
 
 Eclipse and m2e was actually nice enough to have a 'Quick Fix' for these lifecycle issuee: it adds a few lines to the pluginManagement part of the pom for the
 
+{% highlight bash %}
 	<groupId>org.eclipse.m2e</groupId>
 	<artifactId>lifecycle-mapping</artifactId>
+{% endhighlight %}
 
 plugin. Essentially, it just lists out the plugins that need to be 'handled' and then tells them what 'action' should be taken for the plugin when its phase is used. 
 
