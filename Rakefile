@@ -1,39 +1,70 @@
 # Rakefile to help with standard blog activities
 # Inspired by https://github.com/Bilalh/bilalh.github.com/blob/source/Rakefile 
 
-task :default => :local
+##################################################################
+#####  Constants
+##################################################################
+#pid file for the jekyll process
+PID_FILE = '/tmp/jekyll.pid'
+
+##################################################################
+#####  Helper Methods
+##################################################################
+# Get the jekyll pid, if its running
+# if its not running, throws Errno::ESRCH
+def getJekyllPid
+	if File.exists? PID_FILE
+		pid = Integer(File.read(PID_FILE))
+		#if jekyll is alread running, then we are done
+		Process.getpgid( pid )
+		puts "Jekyll already running..."
+		return pid
+	else
+		throw Errno::ESRCH
+	end
+end
+
+##################################################################
+######  Tasks
+##################################################################
+task :default => :refresh
 
 desc "Build from source and start the jekyll server (if not running already)"
 task :build do
 	#grep for a jekyll process
-	fileName = '/tmp/jekyll.pid'
-	started = false
-	if File.exists? fileName
-		pid = Integer(File.read(fileName))
-		begin
-			#if jekyll is alread running, then we are done
-			Process.getpgid( pid )
-			puts "Jekyll already running..."
+	begin
+			getJekyllPid
 			started = true
-		rescue Errno::ESRCH
-			#NOOP - we can start jekyll because it doens't exist
-		end
+		rescue
+		#NOOP - not started
 	end
-
 	#if the process isn't started, start it	
 	unless started
 		puts "Starting jeykll server..." 
 		#Store the pid of jeykll server
-		File.open(fileName, 'w+') do |f|
+		File.open(PID_FILE, 'w+') do |f|
 			# Spawn a new process and run the rake command
 			pid = Process.spawn("jekyll --server", :out => '/dev/null', :err => '/dev/null')
 			f.puts pid
+			# Detach the spawned process
+			Process.detach pid
 		end
-
-		# Detach the spawned process
-		Process.detach pid
 	end
 end
+
+desc "Stop the jekyll server, if it is running already"
+task :stop do
+	begin
+		pid = getJekyllPid()
+		puts "Jekyll running on pid: #{pid}, stopping..."
+		Process.kill("TERM", pid)
+		File.delete(PID_FILE)
+		puts "Killed jekyll"
+  rescue
+		puts "Jekyll already stopped."
+	end
+end
+
 
 desc "Start jekyll and refreshes the web page in Firefox"
 task :refresh => :build do
