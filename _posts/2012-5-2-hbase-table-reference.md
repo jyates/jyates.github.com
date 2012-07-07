@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Table References in the HBase Shell
-tags: hbase, reference, ruby, jruby, big data, 
+tags: hbase, reference, ruby, jruby, big data
 description: How to use the new table references in the HBase shell
 ---
 

@@ -1,11 +1,13 @@
 ---
 layout: post
 title: Welcome to My Blog
+description: First post! Welcome to my blog/about me...
+tags: blog, first, welcome, about
 ---
 
-h1. {{page.title}}
+# {{page.title}}
 
-p(meta). November 11, 2011 - Seattle, WA
+November 11, 2011 - Seattle, WA
 
 Hi, I'm Jesse. If you are reading this, you probably got here after reading one of my other posts. Congratulations on being one of the few people compelled to read _everything_. 
 

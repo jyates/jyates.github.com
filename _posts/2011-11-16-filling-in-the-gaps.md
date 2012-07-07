@@ -1,8 +1,9 @@
 ---
 layout: post
 title: Filling in the BigTable Gaps
+description:BigTable is an amazing, scalable system, but has some missing features.
 ---
-# Filling in the BigTable Gaps
+# {{ page.title }}
 
 November 16, 2011 - Seattle, WA
 
@@ -12,7 +13,7 @@ The technology is still very immature and driven almost entirely by the Open sou
 
 More than a few companies have also been started (Cloudera, Datastax, Opscode, Hortonworks, etc.) around the ideas of to make these tools stable, fast and enterprise ready. Oh, and they sell support (gotta make money somehow, right?). So clearly this cloud stuff needs a lot of help and a lot of more features.
 
-But I’m getting ahead of myself.
+But I'm getting ahead of myself.
 
 Lets jump back 5 years – Google releases the [BigTable paper] and the open source world jumped at the idea, quickly spinning up [HBase] (http://org.apache.hbase) under the Hadoop umbrella. And for a while it seemed great! I can store petabytes of data - awesome. I can access it in real time - even better. And do appends, updates and deletes over a write-once file system? Fantastic. It was even so great the US Government came up with their own version of BigTable, [Accumulo](http://incubator.apache.org/accumulo/), optimized for high throughput, though still faithful to many of the aspects of the original BigTable.
 
