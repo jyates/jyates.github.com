@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Filling in the BigTable Gaps
-description:BigTable is an amazing, scalable system, but has some missing features.
+description: BigTable is an amazingly scalable system, but has some missing features.
+tags: bigtable, hbase, culvert, scale, scalability
 ---
 # {{ page.title }}
 
