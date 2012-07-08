@@ -104,7 +104,7 @@ But instead have to do (assuing your are on a debian system, adjust for you own 
 {% highlight bash %}
 bash "install emacs" do
   user "root"
-  code &lt&lt-EOH
+  code <<-EOH
   apt-get update
   apt-get install -y -q emacs
   EOH
