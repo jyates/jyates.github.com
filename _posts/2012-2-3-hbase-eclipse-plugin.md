@@ -1,9 +1,11 @@
 ---
 layout: post
 title: HBase Eclipse Support
+description: How-To develop for HBase within Eclipse
+tags: HBase, BigTable, Eclipse, dev, development, code, IDE
 ---
 
-# HBase Eclipse Support
+# {{ page.title }}
 February 3rd, 2012 - San Francisco, CA
 
 (WARNING: I'm going to preach a little bit about IDE's. If you don't care, skip on down to the <a href="#hbase">hbase changes</a>).

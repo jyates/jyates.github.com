@@ -1,9 +1,11 @@
 ---
 layout: post
 title: Building Big
+description: A lot of this post is based on my recent discussions with a few companies - both big and small - who are attempting to 'change the paradigm' either of society in general,
+tags: scalable, big, system, code, architecture, Amazon, Google
 ---
 
-# Building Big
+# {{ page.title }}
 ## Or, how to make shit work at scale
 
 January 2, 2012 - Palo Alto, CA

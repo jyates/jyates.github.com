@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Technical Leadership
+description: Yesterday I was talking with a potential future boss and was talking about what I was looking for in my next position
+tags: jobs, leadership, technology, code, architect
 ---
 
 # Technical Leadership

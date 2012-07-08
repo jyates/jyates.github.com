@@ -2,6 +2,7 @@
 layout: post
 title: Heads Down, Thumbs Up
 tags: salesforce.com, hbase
+description: Of late, I've been really busy - let me explain.
 ---
 
 # {{ page.title }}

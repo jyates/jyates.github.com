@@ -1,9 +1,11 @@
 ---
 layout: post
 title: The Worst Case
+description: "Just go and do it. The worst case is your life stays exactly the same."
+tags: worst, case, do it, Haris, try
 ---
 
-# The Worst Case
+# {{ page.title }}
 
 November 22, 2011 - Seattle, WA
 

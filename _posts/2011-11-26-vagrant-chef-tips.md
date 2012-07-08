@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Vagrant + Chef - Tips and Tricks
+description: Some general tips and tricks for using Vagrant and Chef. Dont know what I'm taking about? I'll explain the latest in VM coolness too.
+tags: vagrant, chef, tips, gotcha, tricks, ruby
 ---
 
 # Vagrant + Chef - Tips and Tricks
