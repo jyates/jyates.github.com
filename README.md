@@ -26,12 +26,12 @@ http://0.0.0.0:4000
 ## Credits ##
 =============
 Images from:
-http://www.openclipart.org/people/docguy/docGuy_Page.svg
-http://2b.img.v4.skyrock.net/2b4/emotentation/pics/2570521967_0_9_VOqH0G38.png
-http://www.ettoredelnegro.me/images/github_button.png
+* http://www.openclipart.org/people/docguy/docGuy_Page.svg
+* http://2b.img.v4.skyrock.net/2b4/emotentation/pics/2570521967_0_9_VOqH0G38.png
+* http://www.ettoredelnegro.me/images/github_button.png
 
 ## License ##
 =============
-All content under _posts is licensed under the Creative Commons 2.0 License (http://creativecommons.org/licenses/by/2.0/)
+All content under _posts is licensed under the Creative Commons 3.0 License (http://http://creativecommons.org/licenses/by-nc-nd/3.0/)
 
 All other content is licensed under the MIT License (http://www.opensource.org/licenses/mit-license.php) 
