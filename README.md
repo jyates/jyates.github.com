@@ -9,8 +9,16 @@ See https://github.com/mojombo/jekyll/wiki/configuration for more information on
 
 ## Locally Testing the Blog ##
 ==============================
-This blog can be tested by running:
-'jekyll --server'
+The site can be built through the rake tasks:
+_default_ - starts the site and refreshes firefox
+build - builds the site and starts the server
+stop - stops the server, if its running
+
+run 'rake -T' for more information,
+
+Alternatively, you can run jekyll by hand:
+
+$ 'jekyll --server'
 
 The site can then be seen at:
 http://0.0.0.0:4000
