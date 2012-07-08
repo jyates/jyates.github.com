@@ -1,6 +1,6 @@
 # Jesse's Blog #
 ================
-Jesse Yates's blog is currently being hosted on github.com, and can be viewed at jyates.github.com
+Jesse Yates's blog is currently being hosted on github.com, and can be viewed at http://jyates.github.com
 
 ## Configuration ##
 ===================
