@@ -3,12 +3,8 @@ layout: post
 title: Heads Down, Thumbs Up
 tags: salesforce.com, hbase
 description: Of late, I've been really busy - let me explain.
+location: San Francisco, CA
 ---
-
-# {{ page.title }}
-
-May 1, 2012 - San Francisco, CA
-
 If you have been following this blog at all, you have probably left by now. But for those of you still around (and those new!) here's a little explaination as to the recent gap in posts.
 
 At the end of January 2012 I started working at Salesforce.com on the team dedicated to bringing HBase to one of the world's foremost CRM software providers. Despite being a large company, they are still incredibly agile. Further, I get to spend almost everyday working on a project (HBase) that I used to work on for fun. On top of that my team is top-notch. And we are running real code, that impacts real people and makes a difference everyday. 

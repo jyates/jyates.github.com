@@ -3,6 +3,13 @@ layout: default
 ---
 <div id ="post">
 
+<h1 align="left">{{ page.title }}</h1>
+{% if page.subtitle %}
+<h2 align="left">{{ page.subtitle }}</h2>
+{% endif %}
+
+{{ page.date | date:"%B %d, %Y" }} - {{ page.location }}
+
 {{content}}
 
 <p>Congratulations on making it this far! You clearly will be excited to start following <a href="http://jyates.github.com/atom.xml">my RSS feed</a>.</p>

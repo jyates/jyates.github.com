@@ -28,6 +28,7 @@ end
 ######  Tasks
 ##################################################################
 task :default => :refresh
+task :start => :build
 
 desc "Build from source and start the jekyll server (if not running already)"
 task :build do

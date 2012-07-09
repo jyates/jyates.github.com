@@ -3,12 +3,8 @@ layout: post
 title: The Worst Case
 description: "Just go and do it. The worst case is your life stays exactly the same."
 tags: worst, case, do it, Haris, try
+location: Seattle, WA
 ---
-
-# {{ page.title }}
-
-November 22, 2011 - Seattle, WA
-
 So I'm sitting here in SeaTac Airport for the second time in as many weeks, on my way home for the holidays, and I can't help but be be think of a saying my friend [Haris] (http://www.syedharisali.com) and I have been using recently: "Just go and do it. The worst case is your life stays exactly the same." This is something that has been my on mind frequently over the last couple months as I try to figure out the next steps for my life. 
 
 Two weeks ago I was hanging out with Haris in San Francisco. Ostensibly, I was in the Valley for an interview (more on that later), but I was taking the opportunity to hang out with an old friend. Before going out bar hoping on Saturday night with some of Haris's friends we made a pact to each talk to five girls that night. Not for any sketchy reason, not trying to 'hook-up' with some random girl, but honestly just trying to get better at it as a general life skill. 

@@ -1,15 +1,11 @@
 ---
 layout: post
 title: Building Big
+subtitle: Or, how to make shit work at scale
 description: A lot of this post is based on my recent discussions with a few companies - both big and small - who are attempting to 'change the paradigm' either of society in general,
 tags: scalable, big, system, code, architecture, Amazon, Google
+location: Palo Alto, CA
 ---
-
-# {{ page.title }}
-## Or, how to make shit work at scale
-
-January 2, 2012 - Palo Alto, CA
-
 A lot of this post is based on my recent discussions with a few companies - both big and small - who are attempting to 'change the paradigm' either of society in general, their industry, or just their company. 
 
 Turns out what they are really doing is moving to a cloud infrastructure which all of a sudden is enabling a huge amount of innovation (this stuff is pretty damn exciting and is _really_ changing how we interact with the world). But in a world domainated by SQL and big iron, it is also changing how people think about building these systems. 

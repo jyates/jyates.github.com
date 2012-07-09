@@ -3,11 +3,8 @@ layout: post
 title: Technical Leadership
 description: Yesterday I was talking with a potential future boss and was talking about what I was looking for in my next position
 tags: jobs, leadership, technology, code, architect
+location: Seattle, WA
 ---
-
-# Technical Leadership
-December 2, 2011 - Seattle, WA
-
 Yesterday I was talking with a potential future boss and was talking about what I was looking for in my next position. One of the things I mentioned was I wanted the a technical leadership role. Now, to someone already in managment who has been around for a while will naturally be a little suspicious - as well he should be; the very first thing he asked me was, "So why do you want to be a lead? Because you then have power to boss people around?" 
 
 Don't trust someone who wants power until you understand the why. I've found the best leaders are rarely leaders by choice, but rather because there is no one else better around. Being a leader is stressful, hard, and often times filled with minutae not immediately related to the project. In short, it can really suck. 

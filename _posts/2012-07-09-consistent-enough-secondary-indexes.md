@@ -1,14 +1,12 @@
 ---
 layout: post
-title: Secondary Indexing in a Distributed Environment
-date: 2012-07-08 17:04:10
+title: Consistent Enough Secondary Indexing
+location: San Francisco, CA
 description: Distributed systems inherently trade-off consistency or availability, making it very difficult to get a consistent secondary indexing system. Let's talk about ow to actually make this happen
 tags: hbase, bigtable, second, secondary index, consistency, availiabilty, CAP Theorem
+subtitle: Subtitle
+published: false
 ---
-
-# {{ page.title }}
-July  8, 2012 - San Francisco, CA
-
 Secondary indexing is the solution to finding information quickly that is not the 'primary key' of the entity you are looking up. In an RDBMS, each entity is orgcanize based on primary key - either a random GUID or a key identifying piece of data that is unique (e.g. for a person, social security number). However, that entity has other informatin associated with it that you might want to look up. Going back to our person example, you might want to find all the people living at '123 Jump Street'. With the current configuration, you would have to scan the _entire person table_, looking at each record to see if that person lives at '123 Jump Street' - potentially huge, time consuming query. 
 
 The idea behind secondary indexes is that we 'index' the address field of all the people in our database into another table. The primary key of the secondary index table is just addresses and then it stores all the primary keys (social security numbers) of people living at that address. We are trading space for speed and in very large queries, this tradeoff is entirely acceptable.

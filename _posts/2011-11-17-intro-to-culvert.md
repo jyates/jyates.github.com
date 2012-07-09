@@ -2,13 +2,8 @@
 layout: post
 title: Intro To Culvert
 description: Culvert is a secondary indexing platform for BigTable, which means it provides everything you need to write indexes
-
+location: Seattle, WA
 ---
-
-# {{ page.title }}
-
-November 17, 2011 - Seattle, WA
-
 Culvert is a secondary indexing platform for BigTable, which means it provides everything you need to write indexes and use them to access and well, index your data. Currently Culvert supports [HBase](http://org.apache.hase) and [Accumulo](http://incubator.apache.org/accumulo/), though new adapters are in the pipeline. If you don't know why we need a secondary indexing platform for BigTable, I recommend checking out my [previous post]. 
 
 I'll pause while you go and catch up.

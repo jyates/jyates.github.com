@@ -3,12 +3,8 @@ layout: post
 title: Vagrant + Chef - Tips and Tricks
 description: Some general tips and tricks for using Vagrant and Chef. Dont know what I'm taking about? I'll explain the latest in VM coolness too.
 tags: vagrant, chef, tips, gotcha, tricks, ruby
+location: Somewhere over the continentl US
 ---
-
-# Vagrant + Chef - Tips and Tricks
-
-November 26, 2011 - Somewhere over the continental US
-
 There is a good chance you got here looking for a solution to some fincky problems with vagrant and/or chef. Congrats on using some cool tools! If not, I'm going to introduce the tech I'm talking about and why you should even care. So if 'get it' already, then skip on down to the <a href="#interesting">interesting features</a> discussion - some caveats and tricks might need to keep in mind when working with vagrant + chef.
 
 ## Chef 

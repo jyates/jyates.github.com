@@ -3,11 +3,8 @@ layout: post
 title: High Tech Colors
 description: This is the point where Jobs fell out of love with the style of cool, dark colors and more in favor of the style of many of Apple's
 tags: Steve Jobs, MacBook Pro, color, Sony
+location: Seattle, WA
 ---
-
-# {{ page.title }}
-December 10, 2011 - Seattle, WA
-
 > "...Sony's high-tech look, which is gunmetal gray, maybe ... black"
 
 >	~ Steve Jobs, 1982, in "Steve Jobs" by Walter Issacson

@@ -3,12 +3,8 @@ layout: post
 title: Table References in the HBase Shell
 tags: hbase, reference, ruby, jruby, big data
 description: How to use the new table references in the HBase shell
+location: San Francisco, CA
 ---
-
-# {{ page.title }}
-
-May 2, 2012 - San Francisco, CA
-
 As of HBase v0.96 (currently trunk), one can now get a reference to a table in the client shell. This is huge news for the hbase shell - the biggest update since the security features were added.
 
 The HBase shell is actually a specialized jruby REPL, preloaded with a bunch of specialized HBase functionality. One of the things that always bothered me about the shell was that evn though Ruby is object-oriented AND HTables are objects, _you couldn't get a reference to an HTable_, you had to use the top-level put, get, scan, etc. methods and specify the table name _each time_. A typical test that the shell is working, might look something like this:

@@ -3,11 +3,8 @@ layout: post
 title: Filling in the BigTable Gaps
 description: BigTable is an amazingly scalable system, but has some missing features.
 tags: bigtable, hbase, culvert, scale, scalability
+location: Seattle, WA
 ---
-# {{ page.title }}
-
-November 16, 2011 - Seattle, WA
-
 Big Data is big innovation, big headaches and in the end, big money. The only problem is, is it can be a huge pain to get running….and then to get running correctly.  Recently – in the last 5-8 years – we have seen huge efforts by major companies (Yahoo, Facebook, Twitter, etc.) have put a lot of resources behind these technologies, doubling down on certain stacks to enable next generation business. So there is definitely something there.
 
 The technology is still very immature and driven almost entirely by the Open source community. The implications of that is another blog post[^one], but the punch line is there are a lot of rough edges, incomplete features and frequently a sloooow process[^two]. 
