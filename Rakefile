@@ -100,15 +100,13 @@ task :new do
 		f.puts "---"
 		f.puts "layout: post"
 		f.puts "title: #{title}"
-		f.puts "date: #{now.strftime('%F %T')}"
-		f.puts "description: "
+		f.puts "location:"
+		f.puts "subtitle:"
+		f.puts "description:"
 		f.puts "tags:"
 		f.puts "---"
-		f.puts ""
-		f.puts "# {{ page.title }}"
-		f.puts "#{now.strftime('%B %e, %Y')} - "
 	end
 	
-	exec("vim +5 #{path}")
+	exec("vim +4 #{path}")
 	exit
 end
