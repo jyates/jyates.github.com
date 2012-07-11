@@ -7,7 +7,7 @@ tags: hbase, bigtable, second, secondary index, consistency, availiabilty, CAP T
 ---
 In databases, data is organized into tables, sorted by the 'primary key' of each data row. The primary key is generally either a globally unique id (GUID) or so other uniquely identifying information for that row. 
 
-For instance, in a database of people, you could use social security numbers (SSNs) as the primary key each person-row. Then to find a person by SSN, you can then do O(lg(n)) lookups and find that row. However, suppose you wanted to lookup the person by their address - maybe you want to find all the people living at '123 Jump Street'. With the current table setup, you would have to scan the _entire person table_, looking at each record to see if that person lives at '123 Jump Street' - potentially huge, time consuming query. 
+For instance, in a database of people, you could use social security numbers (SSNs) as the primary key each person-row. Then to find a person by SSN, you can then do O(lg(n)) lookups and find that row (assuming the SQL database of your choice implicitly creates an index on the primary key - otherwise, this is also a full table scan since SQL-esque database ususally don't store data in sorted order, though indexes are stored in B-Trees). However, suppose you wanted to lookup the person by their address - maybe you want to find all the people living at '123 Jump Street'. With the current table setup, you would have to scan the _entire person table_, looking at each record to see if that person lives at '123 Jump Street' - potentially huge, time consuming query. 
 
 The idea behind secondary indexes is that we 'index' the address field of all the people in our database into another table. The primary key of the secondary index table is just addresses and then it stores all the primary keys (social security numbers) of people living at that address. We are trading space for speed and in very large queries, this tradeoff is entirely acceptable. This means that it becomes very fast lg(n) to find the indexed row and then lg(n) again to do the lookup in the primary table. 
 
@@ -152,3 +152,6 @@ There are a lot of potential optimizations you make on top of the proposed imple
 However, we can still to incredibly performant, correct indexes. It might take some time to build an super-optimized implementation of client-consistent indexes, but there are no apparent technical problems; its likely that the simple solution will be performant enough for all but the most demanding use cases.
 
 Think I'm crazy or fully of it? I'd love to hear your thoughts in the comments.
+
+
+_Edit: slight technical correction on traditional database indexing._
