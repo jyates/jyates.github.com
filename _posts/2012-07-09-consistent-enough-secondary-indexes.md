@@ -157,3 +157,14 @@ Think I'm crazy or fully of it? I'd love to hear your thoughts in the comments.
 _Edits:_ 
  1. _slight technical correction on traditional database indexing._
  2. _correct spelling_
+ 3. There is a weird state where the following could happen:
+
+Client 1 -----> write to index table
+Client 2 -----> read index table
+Client 2 -----> read primary table, doesn't find the primary table write from Client 1
+Client 2 -----> delete Client 1's write to the index table
+Client 1 -----> write to the primary table
+
+Which means you get into a state where the index is out-of-date. To resolve this condition, you just setup the constraint that index elements more than 't' time old can't be deleted, but if you find an index element without a matching primary table row, then you are free to delete it. This gives you the constraint on clients writing - they have to complete all writes from the time it hits the index table to finishing the primary table writes in at most 't'. However, if you set this to even a few seconds, this should be sufficient in more cases.
+
+An alternative implementation that is a bit more heavy-weight (in terms of RPCs) is to write to the primary table but mark the writes as 'hidden', then the index table, and then the primary table to 'reveal' the writes. This gets around the timeout issue at the cost of RPCs and the need to put a filter on reads from the primary table.
