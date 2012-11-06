@@ -55,22 +55,22 @@ fi
 # it be automatically loaded. Uncomment the following and adjust the filename if
 # necessary.
 #
-filename=".gems"
-if [[ -s "$filename" ]]
-then
-  rvm gemset import "$filename" | grep -v already | grep -v listed | grep -v complete | sed '/^$/d'
-fi
+#filename=".gems"
+#if [[ -s "$filename" ]]
+#then
+#  rvm gemset import "$filename" | grep -v already | grep -v listed | grep -v complete | sed '/^$/d'
+#fi
 
 # If you use bundler, this might be useful to you:
-# if [[ -s Gemfile ]] && ! command -v bundle >/dev/null
-# then
-#   printf "%b" "The rubygem 'bundler' is not installed. Installing it now.\n"
-#   gem install bundler
-# fi
-# if [[ -s Gemfile ]] && command -v bundle
-# then
-#   bundle install
-# fi
+if [[ -s Gemfile ]] && ! command -v bundle >/dev/null
+ then
+   printf "%b" "The rubygem 'bundler' is not installed. Installing it now.\n"
+   gem install bundler
+fi
+if [[ -s Gemfile ]] && command -v bundle
+then
+   bundle install
+fi
 
 if [[ $- == *i* ]] # check for interactive shells
 then
@@ -78,4 +78,3 @@ then
 else 
 	echo "Using: $GEM_HOME" # don't use colors in interactive shells
 fi
-
