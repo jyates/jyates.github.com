@@ -7,6 +7,12 @@ Jesse Yates's blog is currently being hosted on github.com, and can be viewed at
 Configuration is handled via _config.yml.
 See https://github.com/mojombo/jekyll/wiki/configuration for more information on configuration values
 
+## Building ##
+==============
+
+A default .rvmrc file is included which uses 'bundler' to install almost all the necessary dependencies. The missing ones are:
+* (Pygments)[http://pygments.org/download/]
+
 ## Locally Testing the Blog ##
 ==============================
 The site can be built through the rake tasks:
