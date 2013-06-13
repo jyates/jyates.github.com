@@ -12,9 +12,8 @@ When using a database you don't always want to read the data in the same way eac
 Secondary indexes allow you a 'secondary' mechanism by which to read the database; they store the data in an index which is optimized to be read for an orthogonal facet of your data (for instance, date of arrival). 
 
 The [Oracle documents on BerkleyDB](http://docs.oracle.com/cd/E17076_02/html/programmer_reference/am_second.html) define secondary indexing as:
-```
-A secondary index, put simply, is a way to efficiently access records in a database (the primary) by means of some piece of information other than the usual (primary) key.
-```
+
+> A secondary index, put simply, is a way to efficiently access records in a database (the primary) by means of some piece of information other than the usual (primary) key.
 
 Traditional, single (or a small cluster) server databases achieve secondary indexes by updating a 'index table' which stores the store in the query-organized layout in a transaction with the update to the primary table. This works fine because there is very little overhead - no need to go across the network or rely on complex coordination. Everything is nicely ACID and works with the existing model.
 
@@ -28,19 +27,19 @@ The problem with secondary indexing then is that we are then attempting to add t
 
 ## Old News - An Overview of Existing Options
 
-People have tried many times in the past to implement secondary indexing over HBase - things like [Lily] and [HBaseSI] attempt to tackle the problem head on. 
+People have tried many times in the past to implement secondary indexing over HBase - things like [Lily](http://www.lilyproject.org/) and [HBaseSI](http://www.scpe.org/index.php/scpe/article/view/715) attempt to tackle the problem head on. 
 
 Lily builds its own Write-Ahead Log (WAL) framework on HBase - this gives us most of the expected semantics but at a rather high latency cost. For some use cases, this is fine - if this is you, you can stop reading and go call up the Lily folks.
 
 HBaseSI is an alternative approach but doesn't work well with Scans - its designed for point Gets. However, the general use-case for HBase is multi-row scans, this doesn't translate into a general solution.
 
-People have also attempted to do full transactions on HBase, things like [Omid] and [Percolator] - once you have full transactions between tables, adding secondary indexes are trivial, they are just another transaction. The downfall here, as expected, is the overhead. In a distributed system, you end up creating massive bottlenecks that dramatically reduce the throughput (and increase the latency) of the entire system. For most people, this has proven too much overhead.
+People have also attempted to do full transactions on HBase, things like [Omid](https://github.com/yahoo/omid) and [Percolator](http://research.google.com/pubs/pub36726.html) - once you have full transactions between tables, adding secondary indexes are trivial, they are just another transaction. The downfall here, as expected, is the overhead. In a distributed system, you end up creating massive bottlenecks that dramatically reduce the throughput (and increase the latency) of the entire system. For most people, this has proven too much overhead.
 
 Then people have attempted to do secondary indexing through the application. While this could very well work, it is rarely going to be generally applicable and further, is going to be very brittle. Secondary indexing is properly a function of the database and should be closely tied to its internals to support efficient and correct implementations. In particular, dealing with failure scenarios to guarantee correctness outside of the database layer is often a losing proposition.
 
 Recently, a some work has come up to provide in-region indexing. Essentially, we provide a secondary index on a given Region. Then when querying along the index, we need to talk to each reqion's index to determine if that region contains the row. The obvious downside is a dramatic effects on throughput on latency. Where previously we only had to talk to one server, suddenly we have to talk to *all* the servers and cannot continue until we get a response back from all of them (otherwise, we might miss a positive response). If you are willing to take this latency hit, it can be an acceptable solution - its fully ACID within the HBase semantics.
 
-There has already been a lot of published thought on other ways we could do secondary indexing - I took a crack [here] and Lars Hofhansl has written some thoughts [here] and [here]. However, all these proposals are either (1) wrong in small corner cases or (2) inefficient. We can do better...
+There has already been a lot of published thought on other ways we could do secondary indexing - I took a crack [here](http://jyates.github.io/2012/07/09/consistent-enough-secondary-indexes.html) and my colleague, Lars Hofhansl has written some thoughts [here](http://hadoop-hbase.blogspot.com/2012/10/musings-on-secondary-indexes.html) and [here](http://hadoop-hbase.blogspot.com/2012/10/secondary-indexes-part-ii.html). However, all these proposals are either (1) wrong in small corner cases or (2) inefficient. We can do better...
 
 ## Redefine the problem
 
@@ -70,7 +69,7 @@ Previously, we always expected the client to define all the index updates to mak
 
 What if, instead, we push down the work to the server? It would be the same amount of data transfer. Originally, it was once to the primary table and then once to each index table. If we push down to the server its a primary update to the primary region and then from there out to each of the index tables. There is a bit of an throughput concern here (we have to serialize the process a bit, rather than making the updates in parallel), but its relatively minimal… and we'll talk about how we could alleviate this later.
 
-Since the region - or rather a RegionObserver Coprocessor - builds and writes the index update it should be able to manage the _consistency_ (aCiD) of the updates. Remember that HBase doesn't make any serializability guarantees between clients (see [my previous blog post] about managing this with external time) - all we need to guarantee is that the index updates eventually make it.
+Since the region - or rather a RegionObserver Coprocessor - builds and writes the index update it should be able to manage the _consistency_ (aCiD) of the updates. Remember that HBase doesn't make any serializability guarantees between clients (see [my previous blog post](http://hadoop-hbase.blogspot.com/2012/10/secondary-indexes-part-ii.html) about managing this with external time) - all we need to guarantee is that the index updates eventually make it.
 
 Therefore, lets tie the primary and the index updates together. When we get a write, the coprocessor builds up IndexedKeyValues that contain the index update information and we attach them to the WALEdit for the primary table Mutation. Once this gets written to the WAL its expected to be durable -  we can then attempt to send the index updates to the index tables. 
 
@@ -88,10 +87,9 @@ See the [HBase Reference Guide](http://hbase.apache.org/acid-semantics.html) if 
 
 ## Not just fluff
 
-The above discussion is not just a theoretical investigation on how one _might_ implement secondary indexing - this is actually what we have done. Initially, [hbase-index] is being released as a subproject under Phoenix, but there are discussions around moving this into the HBase core. 
+The above discussion is not just a theoretical investigation on how one _might_ implement secondary indexing - this is actually what we have done. Initially, [hbase-index](https://github.com/jyates/phoenix/tree/hbase-index/contrib/hbase-index)is being released as a subproject under Phoenix, but there are discussions around moving this into the HBase core. 
 
 hbase-index is designed to be a transparent layer between the client and the rest of HBase - nothing is tying it to Phoenx and can be used entirely independently. However, Phoenix support for hbase-index is currently in progress at Salesforce (see the [github issue](https://github.com/forcedotcom/phoenix/issues/4) where James lays out the internals) and will be completely transparent to Phoenix clients. If you don't want to use Phoenix, you can easily create your own IndexBuilder to create the index updates that need to be made. 
-
 
 ### Constraints
 
@@ -112,3 +110,9 @@ There have been a lot of discussion and work around secondary indexes over the l
 By leveraging a RegionObserver that creates custom KeyValues we can be sure all updates are stored into the WAL, giving us the expected durability. This coprocessor then also makes the index updates and fails the server if we cannot make them, triggering a WAL replay and another attempt to update the index. While a bit drastic, these 'fail hard' semantics make it difficult to avoid seeing an error - quickly alerting when your index table is misconfigured.
 
 This isn't a vaporware, the code is already out there [on github] and support is coming to Phoenix. Think this stuff is cool? Then we would love to have you comment on the project or even write some code!
+
+## Upcoming
+
+Now the careful reader will have noticed one glaring omission in this blog post - how do you actual _maintain the index_ in a way that makes sense? We mention an IndexBuilder, but not how you would use it. hbase-index comes with a very simple implementation of an IndexBuilder - merely how one would create and publish updaets to the index. However, this example doesn't cover how it would translate to scanning; in fact, it translates very poorly - there is no index cleanup and makes it very difficult to reason about at scan time.
+
+This is not to say its not possible to create a fully-covered index using the IndexBuilder model. However, it starts to get somewhat complex (a future blog post) - you have do deal with data table lookups and managing which index elements can be be deleted at which timestamps. 
