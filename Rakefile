@@ -41,7 +41,7 @@ task :build do
 	end
 	#if the process isn't started, start it	
 	unless started
-		puts "Starting jeykll server..." 
+		puts "Starting jeykll server http://0.0.0.0:4000/..." 
 		#Store the pid of jeykll server
 		File.open(PID_FILE, 'w+') do |f|
 			# Spawn a new process and run the rake command
