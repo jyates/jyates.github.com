@@ -8,10 +8,10 @@ tags: ironman cozumel, hospital, race, triathlon
 ---
 
 Overall:
-11:31:09
-26th division
-226th gender
-275th overall
+* 11:31:09
+* 26th division
+* 226th gender
+* 275th overall
 
 But clearly, that doesn't tell the whole picture :).
 
