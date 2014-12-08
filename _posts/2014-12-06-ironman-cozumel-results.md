@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ironman Cozumel 2014 Results
+title: Ironman Cozumel 2014 Race Report
 location: Cozumel, Mexico
 subtitle: A race story
 description: Ironman Cozumel 2014 was a heck of a race. A 2.4mi swim half into the current, 112mi bike ride with brutal headwinds and a marathon. Together, it was enough to put me into the hospital.
