@@ -31,12 +31,12 @@ This means that, essentially, I was riding without my two hardest gears (the two
 
 Certainly not the end of the world, but the First sign this wasn't going to be smooth.
 
-<img src="/images/posts/ironman-cozumel-race-recap/package-pickup.jpg" align="left" alt="package pickup with Jan" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/package-pickup.jpg" align="left" alt="package pickup with Jan" width="216" height="162" Hspace="30" Vspace="10">
 
 ## Race Build
 My race build was provided by my coaches over at [purplepatch](www.purplepatch.com)(who are fantastic) and included a variety a swims and runs over the next few days. While they weren't always the most fun (e.g. only hour long rides and mostly below race pace), they were inteded to 'prime the pump' and get the body ready for the race. 
 
-<img src="/images/posts/ironman-cozumel-race-recap/bag-drop-off.jpg" align="left" alt="package pickup with Jan" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/bag-drop-off.jpg" align="right" alt="ready for race day" width="216" height="162" Hspace="30" Vspace="10">
 
 The build also gave me a chance to sample the course a bit - Cozumel is basically only one road, so all the taper rides were on the course. So come race day, I wasn't surprised to hit the monstorous winds on the backside of the island, the very helpful swim current was welcomed heartily and the heat was...to be expected.
 
