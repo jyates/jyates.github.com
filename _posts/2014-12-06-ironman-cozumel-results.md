@@ -117,13 +117,15 @@ I ended up with a 4:27 run - better than my worst marathon, but not nearly where
 
 For the last two miles I decided I could go deeper and ran them. Ended up doing ~8min/mi, but knew knew knew something was wrong.
 
-So it was across the line and then right into the medical tent.
+## 1832 - Finish!
+
+Finally, I was across the line...and right into the medical tent.
 
 After a cup-o-soup and sitting for over an hr, made my way out to the family, but after getting back to the hotel, some vomiting and not being able to get anything more down, it was off the the hospital.
 
 I had hyponatremia - turns out that much clear urine is not good.
 
-<img src="/images/posts/ironman-cozumel-race-recap/mexican-hospital.jpg" align="left" alt="notably worse feeling than at the finish" width="250" height="333" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/mexican-hospital.jpg" align="left" alt="notably worse feeling than at the finish" width="216" height="288" Hspace="30" Vspace="10">
 
 It took a good 18hrs of various drips and bed rest, but got released on Tuesday and was feeling much better at that point (at least good enough for a greasy quesadilla!). A few days later and I was walking around without pain and just excited to come back the SF.
 
