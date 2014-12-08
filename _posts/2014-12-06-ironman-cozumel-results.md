@@ -27,11 +27,11 @@ Unfortunately, it was not smooth sailing even going into the race. But, its not 
 
 Two days before the race, I picked up the bike from TriBike Transport (a company that will ship you bike down - fully built - to various races) something had happened with the frame/bottom bracket and in the heaviest 2 gears the pedal would clip the chain. 
 
+<img src="/images/posts/ironman-cozumel-race-recap/package-pickup.jpg" align="left" alt="package pickup with Jan" width="216" height="162" Hspace="30" Vspace="10">
+
 This means that, essentially, I was riding without my two hardest gears (the two smallest cogs in the back) - from a 22 speed bike (2x11) to a 20 speed (1x11, 1x9). Fortunately, Cozumel is completely flat and you don't need gears with that much torque.
 
 Certainly not the end of the world, but the First sign this wasn't going to be smooth.
-
-<img src="/images/posts/ironman-cozumel-race-recap/package-pickup.jpg" align="left" alt="package pickup with Jan" width="216" height="162" Hspace="30" Vspace="10">
 
 ## Race Build
 My race build was provided by my coaches over at [purplepatch](www.purplepatch.com)(who are fantastic) and included a variety a swims and runs over the next few days. While they weren't always the most fun (e.g. only hour long rides and mostly below race pace), they were inteded to 'prime the pump' and get the body ready for the race. 
@@ -54,11 +54,12 @@ The only hiccup of the morning was with the Nuun tablets (electolyte tablets tha
 
 Into the water and we are off! Not much time for warmup, so its a bit of a slow start in the water.
 
+<img src="/images/posts/ironman-cozumel-race-recap/swim-exit.jpg" align="right" alt="finally done with the swim! now lets get riding." width="216" height="280" Hspace="30" Vspace="10">
+
 Even less help was the fact that that current _was against us, going north_, a rare, but not unheard of occurnace on the island. We were lucky in that about half way through the _current changed directions 180 degrees_ and finally gave us poor swimmers some relief as we headed towards the swim exit.
 
 1:03 swim - exactly what I was targeting. I could have gone faster, but was having weird troubles breathing out while drafting (seems to happen every couple races), so relegated to mostly swimming on my own and not always the straightest. But I'm not complaining.
 
-<img src="/images/posts/ironman-cozumel-race-recap/swim-exit.jpg" align="right" alt="finally done with the swim! now lets get riding." width="216" height="280" Hspace="30" Vspace="10">
 
 ### 0805 - Transition and 112 mi bike
 
@@ -96,7 +97,7 @@ T2 took all of 2:59 - could be better, but I'm happy. Should have spent an extra
 
 So I was off to the run. Already, the pros were well into their run, but at this point I was just looking for a solid performance. Alas, things are never as smaooth as one hopes, and certainly never in Ironman.
 
-<img src="/images/posts/ironman-cozumel-race-recap/run-1.jpg" align="left" alt="already in trouble here, though it doesn't look it" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/run-1.jpg" align="left" alt="already in trouble here, though it doesn't look it" width="216" height="324" Hspace="30" Vspace="10">
 
 First 5 mi, hitting sub-8s and feeling good. In the second half of the lap start walking the aid stations, but the first lap was exactly where I wanted to be - 8min/mile. I was eating fine and though I dropped my salt tabs around mi 6, I had some spares in my special needs bag; I just had to make it back there.
 
@@ -108,7 +109,7 @@ Shortly into the second lap I started to not feel so great. Suddenly, it was wal
 
 Queue the nausea. Now its a matter of how fast can I go without throwing up. 8:30/mi. 9:00/mi. Around the 12mi mark, I completely lost my appetite. 10:00/mi. Then 15:30/mi (speed walking) - as fast as I could go without hurling. But at this point, I knew that even if I walked that last damn 5 miles, I would make it under the cutoff.
 
-<img src="/images/posts/ironman-cozumel-race-recap/finsihed.jpg" align="left" alt="best feeling in the world" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/finished.jpg" align="left" alt="best feeling in the world" width="300" height="450" Hspace="30" Vspace="10">
 
 Fortunately, this means my ankle didn't take too much damage on the run. I felt some twinges around mile 16, but that was shortly followed (2mi later) by mostly walking, so there is some positive to this!!
 
@@ -122,7 +123,7 @@ After a cup-o-soup and sitting for over an hr, made my way out to the family, bu
 
 I had hyponatremia - turns out that much clear urine is not good.
 
-<img src="/images/posts/ironman-cozumel-race-recap/mexican-hospital.jpg" align="left" alt="notably worse feeling than at the finish" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/mexican-hospital.jpg" align="left" alt="notably worse feeling than at the finish" width="250" height="333" Hspace="30" Vspace="10">
 
 It took a good 18hrs of various drips and bed rest, but got released on Tuesday and was feeling much better at that point (at least good enough for a greasy quesadilla!). A few days later and I was walking around without pain and just excited to come back the SF.
 
