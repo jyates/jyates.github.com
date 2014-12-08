@@ -71,7 +71,7 @@ The course is 1 loop of 34 miles followed by two 39 mile loops. Each loop is com
 
 At least, that is what it was supposed to be.
 
-<img src="/images/posts/ironman-cozumel-race-recap/riding-bike.jpg" align="left" alt="riding bicycles is fun!" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/riding-bike.jpg" align="left" alt="riding bicycles is fun!" width="216" height="326" Hspace="30" Vspace="10">
 
 It ended up being that that headwinds started even before you reached the southern point, and were pretty much neutral for the entire stretch south. One could wax poetic about the furor of those winds, but I'll leave it more simply - they sucked, they sucked hard.
 
@@ -83,7 +83,7 @@ It was somewhere around mi 60 or 70 that my nutrition started to go off the rail
 
 There were some minor inner thigh cramps around mi 80, but it went away quickly. A little more hydration and keep rolling.
 
-<img src="/images/posts/ironman-cozumel-race-recap/riding-bike-2.jpg" align="left" alt="it gets much less fun very fast" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/riding-bike-2.jpg" align="left" alt="it gets much less fun very fast" width="216" height="326" Hspace="30" Vspace="10">
 
 To cap it all off, I had 2 mechanical issues. (1) End of the second lap I slowed down to pee (trouble while pushing power) and the back wheel started rubbing the brake. After hopping off and messing with the wheel alignment for a bit - to no avail - I ended up just taking off one of the pads; no back brake anymore, but you don't need one for this course. (2) Soon after the start of lap 3 the right shifter starts rattling. At first, not much of a concern... but then it got worse. 20mi later the shifter had fallen out of the bar and became very difficult to use - not an option for the backside where I needed to shift. Queue another stop, this time at an aid station where the mechanic took apart the shifter. I got back most of my gears - not perfect, but usable for the last 20mis.
 
@@ -109,7 +109,7 @@ Shortly into the second lap I started to not feel so great. Suddenly, it was wal
 
 Queue the nausea. Now its a matter of how fast can I go without throwing up. 8:30/mi. 9:00/mi. Around the 12mi mark, I completely lost my appetite. 10:00/mi. Then 15:30/mi (speed walking) - as fast as I could go without hurling. But at this point, I knew that even if I walked that last damn 5 miles, I would make it under the cutoff.
 
-<img src="/images/posts/ironman-cozumel-race-recap/finished.jpg" align="left" alt="best feeling in the world" width="300" height="450" Hspace="30" Vspace="10">
+<img src="/images/posts/ironman-cozumel-race-recap/finished.jpg" align="right" alt="best feeling in the world" width="300" height="450" Hspace="30" Vspace="10">
 
 Fortunately, this means my ankle didn't take too much damage on the run. I felt some twinges around mile 16, but that was shortly followed (2mi later) by mostly walking, so there is some positive to this!!
 
