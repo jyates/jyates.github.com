@@ -19,13 +19,13 @@ To resolve this, one of the things the maven-shade-plugin does is allow you to r
 
 # Rebundling Camel Netty4
 
-Starting pom [here](https://gist.github.com/jyates/fc3d9b427099b750184c)
+Lets start with a [simple pom](https://gist.github.com/jyates/fc3d9b427099b750184c) that shades the primary dependency and the transitive dependencies that we care about.
 
 We include all the dependencies in the shaded jar, but only shade the maven parts. This lets us make the shaded jar a drop-in replacement for all the camel libraries and their dependencies.
 
 Now, in the module where you actually care about running both libraries you would do:
 
-```
+{% highlight xml %}
 <dependencies>
     <!-- Camel as an abstraction for interacting with the webserver -->
     <dependency>
@@ -34,7 +34,7 @@ Now, in the module where you actually care about running both libraries you woul
     </dependency>
 ...
 </dependencies>
-```
+{% endhighlight %}
 
 ## Caveats
 
@@ -46,7 +46,7 @@ Ok, you can get around it by bundling the exact jars that you want in your runti
 
 The natural thing you would now is just exclude the dependent artifacts from the dependency. However, that was a lot of dependencies we need to exclude and its easy to miss one, which leads to hard-to-debug classpath issues. As of maven3 (really, you are still using maven2? sorry, its manual for you), you can do glob exclusions:
 
-```
+{% highlight xml %}
 <dependencies>
     <!-- Camel as an abstraction for interacting with the webserver -->
     <dependency>
@@ -61,16 +61,16 @@ The natural thing you would now is just exclude the dependent artifacts from the
     </dependency>
 ...
 </dependencies>
-```
+{% endhighlight %}
 
 Fortunately, this actually does everything we want - it excludes all the transitive dependencies and lets us drop-in replace them with the custom, shaded jar we built. 
 
 Only downside? You build gets a some nasty error messages:
 
-```
+{% highlight bash %}
 [WARNING] 'dependencies.dependency.exclusions.exclusion.groupId' for com.jyates:camel-netty4-http-shaded:jar with value '*' does not match a valid id pattern. @ line 70, column 20
 [WARNING] 'dependencies.dependency.exclusions.exclusion.artifactId' for com.jyates:camel-netty4-http-shaded:jar with value '*' does not match a valid id pattern. @ line 71, column 23
-```
+{% endhighlight %}
 
 Oh well, at least everything works.
 
