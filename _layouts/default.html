@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title>{{ page.title }}</title>
-   <meta name="author" content="Jesse Yates" />
-	 <meta name="keywords" content="{{ page.tags }}"/>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>{{ page.title }}</title>
+  <meta name="author" content="Jesse Yates" />
+  <meta name="keywords" content="{{ page.tags }}"/>
 	<!-- Pull in page description to a meta-tag -->
-	 <meta name="description" content="{{ page.description }}" />
+  <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines }}" />
 	<!-- Add google+ profile link in search results -->
-	 <a href="https://plus.google.com/104199283053800841197?rel=author"/>
-   <link rel="alternate" type="application/rss+xml" title="Jesse Yates's Blog" href="http://jyates.github.com/atom.xml" />
+  <a rel="author" href="https://plus.google.com/104199283053800841197?rel=author"/>
+  <link rel="alternate" type="application/rss+xml" title="Jesse Yates's Blog" href="http://jyates.github.com/atom.xml" />
 
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+  <!-- syntax highlighting CSS -->
+  <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 
-   <!-- Homepage CSS -->
-   <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
+  <!-- Homepage CSS -->
+  <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
 
    <!-- Typekit
    <script type="text/javascript" src="http://use.typekit.com/jpd0pfm.js"></script>
    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	-->
-	<!-- Google Analytics -->
-	<script type="text/javascript">
+  <!-- Google Analytics -->
+  <script type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-27060528-1']);
 		_gaq.push(['_trackPageview']);

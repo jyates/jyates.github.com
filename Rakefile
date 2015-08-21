@@ -96,7 +96,6 @@ def createPost(path, title)
 		f.puts "title: #{title}"
 		f.puts "location: San Francisco, CA"
 		f.puts "subtitle:"
-		f.puts "description:"
 		f.puts "tags:"
 		f.puts "---"
 	end

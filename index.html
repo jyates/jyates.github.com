@@ -2,7 +2,7 @@
 layout: default
 title: Jesse Yates's Blog on Big Data, HBase, and Life
 tags: jesse, yates, jesse yates, jesse k yates, wiki, blog, hbase, HBase, profile, who, homepage, culvert, big data, Hadoop, hadoop, index, bigtable, resume, who
-description: Jesse Yates's blog/thoughts on big data, software engineering, latest HBase improvements and (on rare occasions) musings on life.
+excerpt: Jesse Yates's blog/thoughts on big data, software engineering, latest HBase improvements and (on rare occasions) musings on life.
 ---
 <div id="home">
 	<h1>About Me</h1>
@@ -13,7 +13,17 @@ description: Jesse Yates's blog/thoughts on big data, software engineering, late
 	<h1>Blog Posts</h1>
 	<ul class="posts">
     {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a><p> {{ post.description }}...(<a href="{{ post.url }}">read more</a>)</li>
+      <li>
+      <span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a>
+      <p>
+         {% comment %} supports older posts that have descriptions, but newer (as of 08/22/2015) just leverage the jekyll excerpt ability {% endcomment %}
+         {% if post.description != null %}
+           {% assign text = post.description %}
+         {% else %}
+           {% assign text = post.excerpt %}
+        {% endif %}
+
+				{{ text | truncate: 140, "..."}}(<a href="{{ post.url }}">read more</a>)</li>
     {% endfor %}
   </ul>
 </div>
