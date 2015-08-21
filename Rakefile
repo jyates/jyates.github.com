@@ -47,7 +47,7 @@ task :build do
 		#Store the pid of jeykll server
 		File.open(PID_FILE, 'w+') do |f|
 			# Spawn a new process and run the rake command
-			pid = Process.spawn("jekyll server -w", :out => '/dev/null', :err => '/dev/null')
+			pid = Process.spawn("jekyll server -w --drafts", :out => '/dev/null', :err => '/dev/null')
 			f.puts pid
 			# Detach the spawned process
 			Process.detach pid
@@ -94,7 +94,7 @@ def createPost(path, title)
 		f.puts "---"
 		f.puts "layout: post"
 		f.puts "title: #{title}"
-		f.puts "location:"
+		f.puts "location: San Francisco, CA"
 		f.puts "subtitle:"
 		f.puts "description:"
 		f.puts "tags:"
