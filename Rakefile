@@ -1,6 +1,8 @@
 # Rakefile to help with standard blog activities
 # Inspired by https://github.com/Bilalh/bilalh.github.com/blob/source/Rakefile 
 
+require 'fileutils'
+
 ##################################################################
 #####  Constants
 ##################################################################
@@ -87,15 +89,7 @@ task :refresh => :build do
 end
 
 
-desc "Makes a new post - rake new <post title>"
-task :new do
-	throw "No title given" unless ARGV[1]
-	title = ""
-	ARGV[1..ARGV.length - 1].each { |v| title += " #{v}" }
-	title.strip!
-	now = Time.now
-	path = "_posts/#{now.strftime('%F')}-#{title.downcase.gsub(/[\s\.]/, '-').gsub(/[^\w\d\-]/, '')}.md"
-	
+def createPost(path, title)
 	File.open(path, "w") do |f|
 		f.puts "---"
 		f.puts "layout: post"
@@ -106,7 +100,55 @@ task :new do
 		f.puts "tags:"
 		f.puts "---"
 	end
-	
+end
+
+def sanitizeTitle(title)
+  return title.downcase.gsub(/[\s\.]/, '-').gsub(/[^\w\d\-]/, '')
+end
+
+def getPostPath(title)
+  now = Time.now
+  return "_posts/#{now.strftime('%F')}-#{title}.md"
+end
+
+desc "Makes a new post - rake new <post title>"
+task :new do
+	throw "No title given" unless ARGV[1]
+	title = ""
+	ARGV[1..ARGV.length - 1].each { |v| title += " #{v}" }
+	title.strip!
+	path = getPostPath(sanitizeTitle(title))
+	createPost(path, title)
 	exec("vim +4 #{path}")
 	exit
+end
+
+desc "Create a new draft post - rake draft <post title>"
+task :draft do
+	throw "No title given" unless ARGV[1]
+  title = ""
+  ARGV[1..ARGV.length - 1].each { |v| title += " #{v}" }
+  title.strip!
+  path = "_drafts/#{sanitizeTitle(title)}.md"
+  createPost(path, title)
+  exec("vim +4 #{path}")
+  exit
+end
+
+desc "Move a draft to full post - rake publish <path to file>"
+task :publish do
+  title = ARGV.last
+  # Cleanup the title to just the name of the post
+  cleanTitle = title.gsub("_drafts/", '')
+  offset = cleanTitle.rindex(".md")
+  cleanTitle = cleanTitle.slice(0, offset) unless offset.nil?
+
+  # find to whence we should move the path for a post
+  postPath = getPostPath(cleanTitle)
+
+  # do the actual move
+  FileUtils.mv(title, postPath)
+
+  # exit because Rake will find the '.' in the file name as somehow being a new rake task
+  exit
 end
