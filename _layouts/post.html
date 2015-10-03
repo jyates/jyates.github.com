@@ -1,37 +1,32 @@
 ---
 layout: default
 ---
-<div id ="post">
+<!-- Blog Post Content Column -->
+<div class="col-lg-8 col-md-offset-1">
+  <h1 align="left">{{ page.title }}</h1>
+  {% if page.subtitle %}
+  <h2 align="left">{{ page.subtitle }}</h2>
+  {% endif %}
 
-<h1 align="left">{{ page.title }}</h1>
-{% if page.subtitle %}
-<h2 align="left">{{ page.subtitle }}</h2>
-{% endif %}
+  {{ page.date | date:"%B %d, %Y" }} - {{ page.location }}
 
-{{ page.date | date:"%B %d, %Y" }} - {{ page.location }}
+  {{content}}
 
-{{content}}
+  <h3 align="center">-----------</h3>
+  <p>Congratulations on making it this far! You clearly will be excited to start following <a href="http://jyates.github.com/atom.xml">my RSS feed</a>.</p>
 
-<h3 align="center">-----------</h3>
-<p>Congratulations on making it this far! You clearly will be excited to start following <a href="http://jyates.github.com/atom.xml">my RSS feed</a>.</p>
-<p>
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">
-<img class="aligncenter" alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"/>
-</a>
-</p>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname = 'jesseyatesblog';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>

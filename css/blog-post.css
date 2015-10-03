@@ -1,0 +1,108 @@
+/*!
+ * Start Bootstrap - Blog Post HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+footer {
+    margin: 50px 0;
+}
+
+div .headshot {
+  max-width: 11em;
+}
+
+/** Added CSS classes from original below **/
+
+/**************************************************************************
+Default/index.html
+/**************************************************************************/
+
+
+.navbar-nav li a {
+  line-height: 20px;
+}
+
+/* limit the nav bar image sizes */
+nav div div ul li .blog-img-nav-link {
+  max-width: 35px;
+}
+
+nav div div ul li .blog-nav-link-ref {
+  opacity: 1;
+}
+
+ul.posts {
+  list-style-type: none;
+  margin-bottom: 2em;
+}
+
+
+ul.posts li {
+  line-height: 1.75em;
+}
+
+ul.posts span {
+  color: #aaa;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: 100%;
+}
+
+/**************************************************************************
+Posts
+/**************************************************************************/
+
+#post {
+  text-align: justify;
+  margin: 3em auto 2em auto;
+  line-height: 1.5em;
+  width: 40em;
+}
+
+/* standard */
+
+#post pre {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  padding: 0 .4em;
+}
+
+#post ul, #post ol {
+  margin-left: 1.35em;
+}
+
+#post code {
+  border: 1px solid #ddd;
+  background-color: #eef;
+  font-size: 85%;
+  padding: 0 .2em;
+}
+
+#post pre code {
+  border: none;
+}
+
+/* terminal */
+
+#post pre.terminal {
+  border: 1px solid black;
+  background-color: #333;
+  color: white;
+}
+
+#post pre.terminal code {
+  background-color: #333;
+}
+
+/* related posts */
+#related {
+  margin-top: 2em;
+}
+
+#related h2 {
+  margin-bottom: 1em;
+}

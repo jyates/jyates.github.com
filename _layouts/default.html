@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>{{ page.title }}</title>
   <meta name="author" content="Jesse Yates" />
   <meta name="keywords" content="{{ page.tags }}"/>
@@ -11,16 +14,24 @@
   <a rel="author" href="https://plus.google.com/104199283053800841197?rel=author"/>
   <link rel="alternate" type="application/rss+xml" title="Jesse Yates's Blog" href="http://jyates.github.com/atom.xml" />
 
+  <!-- Bootstrap stuff -->
+  <!-- Bootstrap Core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="/css/blog-post.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- /Bootstrap stuff -->
+
   <!-- syntax highlighting CSS -->
   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
 
-  <!-- Homepage CSS -->
-  <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
-
-   <!-- Typekit
-   <script type="text/javascript" src="http://use.typekit.com/jpd0pfm.js"></script>
-   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-	-->
   <!-- Google Analytics -->
   <script type="text/javascript">
 		var _gaq = _gaq || [];
@@ -32,27 +43,77 @@
 			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
-	</script>
+  </script>
 </head>
 <body>
 
-<div class="site">
-  <div class="title">
-    <a href="/">Home</a>
-  </div>
-  
-  {{ content }}
-  
-  <div class="footer">
-    <div class="rss">
-      <a href="http://feeds.feedburner.com/jesseyates">
-        <img src="/images/rss.png" alt="Subscribe to RSS Feed" />
-      </a>
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a style="margin-top: 6px;" class="navbar-brand" href="/">Home</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <!--<div class="container navbar-btn">-->
+            <a class="blog-nav-link-ref" href="http://twitter.com/#!/jesse_yates">
+              <img class="blog-img-nav-link" src="/images/twitter3.png" alt="Follow @jesse_yates on twitter" />
+            </a>
+            <!--</div>-->
+          </li>
+          <li>
+            <a class="blog-nav-link-ref" href="http://github.com/jyates">
+              <img class="blog-img-nav-link" src="/images/github.png" alt="Follow @jyates on github" />
+            </a>
+          </li>
+          <li>
+            <a class="blog-nav-link-ref" href="mailto:me@jesseyates.com?Subject=Found your website" target="_top">
+              <img class="blog-img-nav-link" src="/images/contact.png" alt="Follow @jyates on github" />
+            </a>
+          </li>
+          <li>
+            <a class="blog-nav-link-ref" href="http://jyates.github.com/atom.xml" target="_top">
+              <img class="blog-img-nav-link" src="/images/rss.png" alt="Follow the blog on rss  " />
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
     </div>
-	</div>
+    <!-- /.container -->
+  </nav>
 
-<!-- Fork me tag -->
-<a href="http://github.com/jyates"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
-</div>
+  <div class="container">
+    <div class="row">
+      {{ content }}
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="row">
+      <div class="col-lg-12" align="center">
+        <p>Creative Commons License &copy; jesseyates.com 2015</p>
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">
+          <img class="aligncenter" alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"/>
+        </a>
+      </div>
+    </div>
+    <!-- /.row -->
+  </footer>
+
+  <!-- jQuery -->
+  <script src="js/jquery.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
