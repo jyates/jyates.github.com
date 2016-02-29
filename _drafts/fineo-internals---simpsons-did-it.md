@@ -19,9 +19,13 @@ Now, as with all Simpsons instances, the key comes in the differentiators. Our p
 Netflix, but is also leveraged to enable real Enterprise SaaS requirements: end-to-end encryption, backups, and validation. 
 Additionally, our design allows for easy, rapid prototyping and deployment of new components.
  
-<img src="/images/posts/fineo_internals/ingest.png" align="left" width="216" height="280" Hspace="30" Vspace="10">
+<img src="/images/posts/fineo_internals/ingest_02-16-16.png" align="left" Vspace="10">
 
-We leverage a host of AWS services for a couple of reasons: (1) as we scale up, cost scales with us and (2) operational burdens 
+We leverage a host of AWS services for a couple of reasons:
+
+1. as we scale up, cost scales with us
+2. operational burdens
+ 
 are nearly zero. Instead of storing data in Kafka, we leverage Kinesis, which has very similar semantics. Kinesis also 
 integrates with a variety of end points - web APIs and Amazon's new IoT service which we look to adopt soon.
  
