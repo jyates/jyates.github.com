@@ -8,6 +8,7 @@ require 'fileutils'
 ##################################################################
 #pid file for the jekyll process
 PID_FILE = '/tmp/jekyll.pid'
+ERR_FILE = '/tmp/jekyll.error'
 
 ##################################################################
 #####  Helper Methods
@@ -47,7 +48,8 @@ task :build do
 		#Store the pid of jeykll server
 		File.open(PID_FILE, 'w+') do |f|
 			# Spawn a new process and run the rake command
-			pid = Process.spawn("jekyll server -w --drafts", :out => '/dev/null', :err => '/dev/null')
+      puts "Writing errors to #{ERR_FILE}"
+			pid = Process.spawn("jekyll server -w --drafts", :out => '/dev/null', :err => ERR_FILE) 
 			f.puts pid
 			# Detach the spawned process
 			Process.detach pid
