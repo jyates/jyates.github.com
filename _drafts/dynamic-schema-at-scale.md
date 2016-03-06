@@ -263,6 +263,20 @@ Part of the power of using a NoSQL store is that we can just stuff in fields wit
  (schema management really is just DDL). Since we know the field names, we can then later just query what we expect 
  is in there, and have the database tell us what actually is there.
  
+Our Dynamo extension of the ASR also has support for tracking unknown field names and potential types. When we 
+receive events that have 'unknown fields' we update the unknown fields list for that ```Metric``` type in Dynamo and 
+then write the unknown fields into columns by the customer specified name as simple strings. When customers query for
+ fields that have not been formalized they have to provide the expected type of the field. We use this expected type 
+ to parse the field and read it into our query engine, but also keep track of the requested type along side the 
+ unknown name.
+  
+ This lets us know, without scanning a single row, if the fields the customer is requesting could be present. We can 
+ also use this type information to suggest to the admin - who does the schema formalization - what type(s) probably 
+ describe the field. We also do some simple field parsing on unknown fields to attempt to identify what types it 
+ could be. This makes it wildly easy for admins to easily formalize the schema from customer fields.
+ 
+### Nearline to Offline Query
+ 
  DynamoDB, and other row stores, act really nicely as a near-line data store. You can write data pretty quickly and 
  don't have to do a lot of expensive work to read relatively large swaths of it back again for small analytics. 
  However, once you come to doing large analytics over a wide time range, these tools start to fall down. Batch 
@@ -271,6 +285,15 @@ Part of the power of using a NoSQL store is that we can just stuff in fields wit
  types and fields going into it. Thus, we eventually - generally about every month - require that you finally get 
  around to formalizing the schema so we can finish the ingest portion with a large Spark ETL job that does the final 
  step to convert the schematized records from the ingest pipeline into Redshift-ready data.
+ 
+ Naturally, we don't want to completely rewrite the Dynamo data when we customers formalize the schema - that quickly
+ becomes cost and time prohibitive. Instead, we keep around the old names (remember that alias field?) and query 
+ based on the normalized name we generate during schema formalization and the old alias name, in case we have fields
+ that were written with the old, pre-formalization name. We keep different tables for different time ranges (similar,
+ though more manual that doing a TTL in HBase) and age off old tables, eventually letting us limit the fields we 
+ query to just the normalized field. Since we know when the data was written - everything has a timestamp - and when 
+ the schema was formalized, we can be very specific about which field name we expect. 
+    
  
 # Enterprise-y extensions
 
