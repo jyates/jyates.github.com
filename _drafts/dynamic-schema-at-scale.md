@@ -227,7 +227,7 @@ instance then looks like:
    "metadata": {
       "canonicalName": "n2222222",
       "canonicalNamesToAliases": {
-        "f1": ["temperature"]
+        "f1": ["temperature"],
         "f2": ["pressure"],
         "f3": ["gallons"]
       }
