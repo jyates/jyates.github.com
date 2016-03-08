@@ -71,9 +71,9 @@ manage the evolution of schema for a logical 'subject', a collection of mutually
 'thing' you are managing). The ASR comes with a couple of nice default adapters - zookeeper and a local FS. If you 
 poke around, there is also a JDBC based backend.
   
-At Fineo we pursue 'zero-ops', choosing instead to rely on hosted services to get us running with 
-minimum overhead. To that end, we wrote a custom endpoint backed by DynamoDB that reads and writes in 'consistent 
-mode'. AWS does offer a host relational database (RDS), but is managed by the machine, rather than by the request as 
+At Fineo we attempt to reach 'zero-ops', choosing instead to rely on hosted services to get us running with 
+minimum overhead and automating everything else. To that end, we wrote a custom schema store backend on top of
+DynamoDB. AWS does offer a host relational database (RDS), but is managed by the machine, rather than by the request as 
 with Dynamo, leading to more ops that we really wanted. The tradeoff with Dynamo is that we will incur 2-3x write 
 overhead to ensure that we get consistent results [[1](#dynamo-schema-repo)].
 
@@ -106,7 +106,7 @@ Let me call that out again - the schema for a given 'object' for a customer is a
  + schema ID + schema alias(es).  You end up with something like:
  
 | subject id | schema |
-|-----------  |--------|
+|-----------|--------|
 | _fineo-metadata | Metadata.schema|
 | _fineo-metric | Metric.schema|
 | data production inc. | Metadata.instance|
@@ -115,57 +115,40 @@ Let me call that out again - the schema for a given 'object' for a customer is a
 
 Ok, that is going to take some explaning. The Metada.schema and Metric.schema are actually the following Avro 
 schemas[[2](#metric-fields)]:
-```
-@namespace("io.fineo.internal.customer")
-protocol Organization{
-  // Metadata about an organization, specifically:
-  // - the org ID
-  // - the map of the metric cannonical and alias names
-  //
-  // Decoupled from metric instances to allow them to change independently
-  record Metadata {
+
+{% highlight C %}
+ record Metadata {
     string canonicalName;
-    // helper record to map a canonical name to a number of aliases
     union {null, map<array<string>>} canonicalNamesToAliases = null;
   }
 
-  // A metric's schema in an organization.
-  //
-  // While this defines a schema, the actual schema of a metric is an _instance_ of this class
-  // It will store the metric's canonical name  (used to look it up in the
-  // parent's metadata), the field map for the actual metric's fields (name -> aliases) and then
-  // the schema of the actual metric itself.
   record Metric{
-    // its 'a' metadata, but not 'the' metadata
     Metadata metadata;
-    // actual schema
     string metricSchema;
   }
-  
-  // The base fields that are assumed to be in any BaseRecord
-    record BaseFields{
-      string aliasName;
-      long timestamp;
-      map<string> unknown_fields;
-    }
-  
-    // The base record instance that we use to build a metric type schema. In code we add the desired
-    // fields to create the full record
-    record BaseRecord {
-      BaseFields baseFields;
-    }
-```
+
+  record BaseFields{
+    string aliasName;
+    long timestamp;
+    map<string> unknown_fields;
+  }
+
+  record BaseRecord {
+    BaseFields baseFields;
+  }
+{% endhighlight %}
 
 These schemas are then used to to understand the Metadata and
  Metric instances we get per customer. Going back to our example of DPI above, your first level Metadata instance 
  will look something like:
  
-```
- canonicalName =  n1
- canonicalNamesToAliases = [
-  n2222222 => (machine1, machine1b, machine1c)
- ]
-```
+{% highlight json %}
+{
+  "canonicalName": "n1",
+  "canonicalNamesToAliases": {
+    "n2222222": ["machine1", "machine1b", "machine1c"]
+}
+{% endhighlight %}
 
 So the customerId is ```n1```. This customer only has a single schema, with the canonical name ```n2222222```. 
 However, we might get multiple different device name types that are really the same "thing". This is useful when you 
@@ -174,16 +157,18 @@ have devices from different manufacturers that produce different metrics, but ar
 From there, you can also lookup the schema instance for the device ```n2222222``` (which to the client looks like 
 they are looking up machine1 or machine1b or machine1c). That will give you something like:
 
-```
-  metadata = [
-    canonicalName =  n2222222
-    canonicalNamesToAliases = [
-      f1 => (field1)
-      f2 => (field2, field2b) 
-    ]
-  ],
-  metricSchema = [\\ some encoded avro schema based on a BaseRecord \\]
-```
+{% highlight json %}
+  {
+    "metadata": {
+      "canonicalName": "n2222222",
+      "canonicalNamesToAliases" : {
+        "f1": ["field1"],
+        "f2": ["field2", "field2b"] 
+      }
+    },
+    "metricSchema": "\\ some encoded avro schema based on a BaseRecord \\"
+  }
+{% endhighlight %}
 
 So a machine is actually an instance of a ```Metric```, that has an instance of its own metadata to map canonical field 
 names, keep track of its own name and then store the _schema for the actual customer record_.
@@ -210,52 +195,52 @@ an extension of the ```BaseRecord```. Each event in the platform is expected to 
  
 Going back to our example of DPI, they brought a new machine online which has a couple of metrics: temperature, 
 pressure and gallons. After connecting it to the platform, we will end up with a record that looks like:
-```
+{% highlight json %}
   {
-    "source":"new machine",
+    "source": "new machine",
     "timestamp": "January 12, 2015 10:12:15",
     "temperature": "15",
     "pressure": "4",
     "gallons": "5"
   }
-```
+{% endhighlight %}
 
 Which gets remapped via the [Fineo ingest pipeline] to a simple ```BaseRecord``` instance:
-```
+{% highlight json %}
   {
-    "alias":"new machine",
+    "alias": "new machine",
     "timestamp": "1421057535000",
-    unknown_fields: {
+    "unknown_fields": {
       "temperature": "15",
       "pressure": "4",
       "gallons": "5"
     }
   }
-```
+{% endhighlight %}
 
 The ```unknown_fields``` then get stored as simple strings in DynamoDB, which we can query out later (through some 
 smart gymnastics) _without having defined any schema or types_. Now at some point later an admin goes in and 
 formalizes the schema to types that we talked about. The 'extended ```BaseRecord```' and machine ```Metric``` 
 instance then looks like:
 
-```
-   metadata = [
-      canonicalName =  n2222222
-      canonicalNamesToAliases = [
-        f1: [temperature]
-        f2: [pressure],
-        f3: [gallons]
-      ]
-    ],
-    metricSchema  = [
-      record eBaseRecord {
+{% highlight json %}
+   "metadata": {
+      "canonicalName": "n2222222",
+      "canonicalNamesToAliases": {
+        "f1": ["temperature"]
+        "f2": ["pressure"],
+        "f3": ["gallons"]
+      }
+    },
+    "metricSchema" :
+      "record eBaseRecord {
         BaseFields baseFields;
         int f1;
         long f2;
         int f3;
-      }
-    ]
-```
+      }"
+    }
+{% endhighlight %}
 
 ## Lazy schema - not your grandmother's... schema
 
@@ -270,10 +255,11 @@ then write the unknown fields into columns by the customer specified name as sim
  to parse the field and read it into our query engine, but also keep track of the requested type along side the 
  unknown name.
   
- This lets us know, without scanning a single row, if the fields the customer is requesting could be present. We can 
+ Thus, without scanning a single row, we know if the fields the customer is requesting could be present. We can 
  also use this type information to suggest to the admin - who does the schema formalization - what type(s) probably 
- describe the field. We also do some simple field parsing on unknown fields to attempt to identify what types it 
- could be. This makes it wildly easy for admins to easily formalize the schema from customer fields.
+ describe the field. This makes it wildly easy for admins to easily formalize the schema from the way they already 
+ query the data. We could later, as part of our ingest pipeline, also do some simple field parsing on unknown fields
+  to attempt to identify what types it could be. 
  
 ### Nearline to Offline Query
  
@@ -297,21 +283,21 @@ then write the unknown fields into columns by the customer specified name as sim
  
 # Enterprise-y extensions
 
-Dynamic schema management and lazy evolution gives users lots of power to manage their data. In any enterprise space,
- this means, much like Spiderman, with great power comes great responsibility.
-  
-  <div align="center">
-  <iframe src="//giphy.com/embed/11qAyKz9AbFEYM" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen>
-  </iframe>
-  </div>
-
-At [Fineo] we take security very seriously - every event is monitored and is auditable. Schema changes create their 
+Dynamic schema management and lazy evolution gives users lots of power to manage their data. At [Fineo] we take 
+security very seriously - every event is monitored and is auditable. Schema changes create their 
 own 'schema change event' (which itself has its own schema). So do queries - on dynamic and known fields. Now you can
  see exactly what data came in and who changed what when. And you can do it all in SQL, so you know its easy.
  
-# Wrap it up
+ We also leverage industry-standard, fine-grained, role-based access control. This lets you choose who can write data,
+  make queries, create and trigger alerts and formalize schema.
 
-<img src="/images/posts/fineo-dynamic-schema/wrap-it-up.png" align="center"/>
+<div>
+ <img src="/images/posts/fineo-dynamic-schema/wrap-it-up.jpeg" align="center"/>
+</div>
+
+
+ 
+# In conclusion...
 
 As a customer of [Fineo] you can write almost any data your want, whenever you want at pretty much whatever rate you 
 want. We trust Amazon to handle whatever load you can throw at it (they've gotten pretty good) and then load it into 
@@ -322,6 +308,7 @@ time figure out the types or complaining when the wrong fields are sent.
 
 While this gets you pretty far, we do see somethings that we think customers would find helpful:
  
+ * field type prediction
  * dynamic field typing, so you can change the type of data
  * advanced sanitization and transformation
  * missing field alerts

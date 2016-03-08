@@ -49,7 +49,7 @@ task :build do
 		File.open(PID_FILE, 'w+') do |f|
 			# Spawn a new process and run the rake command
       puts "Writing errors to #{ERR_FILE}"
-			pid = Process.spawn("jekyll server -w --drafts", :out => '/dev/null', :err => ERR_FILE) 
+			pid = Process.spawn("jekyll server --watch --drafts", :out => '/dev/null', :err => ERR_FILE) 
 			f.puts pid
 			# Detach the spawned process
 			Process.detach pid
