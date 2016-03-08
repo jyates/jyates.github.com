@@ -79,7 +79,7 @@ overhead to ensure that we get consistent results [[1](#dynamo-schema-repo)].
 
 We hope to open source the DynamoDB adapter for ASR soon. Keep an eye out!
 
-## ASR Access
+## Avro Schema Repository Access
 
 As we attempt to move to zero-ops, we can actually throw out the REST layer and just query DynamoDB directly using 
 the ASR schema repository api. It still provides all the caching you would expect, but saves us a network hop. 
@@ -92,7 +92,8 @@ Keep in mind that the schema repository has two touch points:
  * external webserver for reads + schema management
  
 As essentially stateless services, we can deploy them as need be and even replace the direct DynamoDB access with the
-REST endpoint with minimal code changes.
+REST endpoint with minimal code changes. Also talking directly to our Dynamo endpoint gives us the ability to read 
+and use previously unknown fields (discussed later).
 
 ## Managing multiple entities
 
@@ -104,14 +105,17 @@ the customer schema so we can manage those aliases directly _as part of the sche
 
 Let me call that out again - the schema for a given 'object' for a customer is actually a combination of the tenantID
  + schema ID + schema alias(es).  You end up with something like:
- 
-| subject id | schema |
-|-----------|--------|
-| _fineo-metadata | Metadata.schema|
-| _fineo-metric | Metric.schema|
-| data production inc. | Metadata.instance|
-| n1 | Metric.instance |
-| n2222222 | Metric.instance |
+
+  | subject id | schema |
+  |:-----------|--------:|
+  | _fineo-metadata | Metadata.schema|
+  | _fineo-metric | Metric.schema|
+  | data production inc. | Metadata.instance|
+  | n1 | Metric.instance |
+  | n2222222 | Metric.instance |
+ {: align="center" width="40%"}
+
+<p/>
 
 Ok, that is going to take some explaning. The Metada.schema and Metric.schema are actually the following Avro 
 schemas[[2](#metric-fields)]:
@@ -224,6 +228,7 @@ formalizes the schema to types that we talked about. The 'extended ```BaseRecord
 instance then looks like:
 
 {% highlight json %}
+{
    "metadata": {
       "canonicalName": "n2222222",
       "canonicalNamesToAliases": {
@@ -239,7 +244,7 @@ instance then looks like:
         long f2;
         int f3;
       }"
-    }
+}
 {% endhighlight %}
 
 ## Lazy schema - not your grandmother's... schema
@@ -291,10 +296,8 @@ own 'schema change event' (which itself has its own schema). So do queries - on 
  We also leverage industry-standard, fine-grained, role-based access control. This lets you choose who can write data,
   make queries, create and trigger alerts and formalize schema.
 
-<div>
- <img src="/images/posts/fineo-dynamic-schema/wrap-it-up.jpeg" align="center"/>
-</div>
-
+<img src="/images/posts/fineo-dynamic-schema/wrap-it-up.jpeg"/>
+{: align="center"}
 
  
 # In conclusion...
@@ -319,19 +322,19 @@ see!
 [Fineo] is also selecting its early **beta customers** so please [reach out](mailto:ceo@fineo.io) if you are 
 interested in getting involved in our upcoming rollout.
 
-# Notes
+#### Notes
 
-## 1. Dynamo Schema Repo
+##### 1. Dynamo Schema Repo
 We can actually be a bit lazier here and not read/write with full consistency, instead relying on the mutually 
 compatible evolutionary nature of Avro schema. We should be able to step through old versions to read data from data 
 serialized with an older schema. In fact, we can keep track of which schema number (schema-id) the data was written 
 with and just use that schema to deserialze data. 
 
-## 2. Metric Fields
+##### 2. Metric Fields
 We also have the ability to 'hide' fields associated with a machine. This allows us to do 'soft deletes' of the data 
 and then garbage collect them as part of our standard age off process.
 
-## 3. Realtime
+##### 3. Realtime
 For some definitions of realtime. Currently our ingest pipeline is less than 1 minute, though we have extensions that
  allow querying on data within tens of milliseconds of ingest. Talk to [Jesse](mailto:ceo@fineo.io) if that is 
  something you are interested in.
