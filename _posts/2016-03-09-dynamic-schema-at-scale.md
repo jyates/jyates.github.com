@@ -38,6 +38,9 @@ different possible fields you will receive. Then you need to manually write the 
  
  Basically your standard, pain-in-the-ass ingest work. Only after you have done all of this massaging can you even 
  begin to look at your line and determine how its running.
+ 
+ <img src="/images/posts/fineo-dynamic-schema/no-etl.png"/>
+ {: align="center"}
 
 ## Fineo = Easy Ingest
 
@@ -46,65 +49,83 @@ endpoints, we will automagically tell you all the different fields. From there, 
 the schema you want. Field name normalizations (aliasing) is a simple drag-and-drop. Empty values are automatically 
 handled by our NoSQL backend.
 
-But here is where it gets really cool. You don't even need to do any of that schema management until you have time to
+And then it gets really cool.
+
+You don't even need to do any of that schema management until you have time to
 get around to it. Instead, you can start querying for fields immediately, just by knowing the names and what type 
 you expect it to be. From there, you can use the whole world of SQL to slice and dice data, so you can quickly and 
 easily get your line running.
  
-You then have up to a month to formalize your schema. Formalizing the schema makes it so we can auto-complete 
+You have up to a month to formalize your schema. Formalizing the schema makes it so we can auto-complete 
 queries (from the UI) and dramatically speed up any analytics. However, you can also continue using the alias names 
 for different fields that you had developed before formalizing the schema, so the queries you are already running 
 will continue to run just fine.
  
 # Schema Management Internals
 
+In the [Fineo ingest pipeline] post, it looked like we only had one touch point with the schema store and that it was
+ stand alone. That was a simplication of what it really looks like:
+  
+ <img src="/images/posts/fineo-dynamic-schema/actual-schema-management.png">
+ {: align="center"}
+
+Ok, that really isn't too much more, but those simple boxes hide a host of complexity.
+
+## Avro All Around
+
 The root of our schema management process uses [Apache Avro](http://avro.apache.org/). Avro is great - it has schema 
-evolution, field aliasing and self-describing serialization. Sounds like we are done! Just use Avro eveywhere.
+evolution, field aliasing and self-describing serialization. Sounds like we are done! Just use Avro everywhere.
  
 Not so fast.
 
 To start with, you need a way to keep track of all different schemas for each customer. Enter the 
 [avro schema repo](https://github.com/schema-repo/schema-repo), 
-which is based on some work Jay Kreps did in [AVRO-1124](https://issues.apache.org/jira/browse/AVRO-1124). 
+based on some work Jay Kreps did in [AVRO-1124](https://issues.apache.org/jira/browse/AVRO-1124). 
 The Avro Schema Repo (ASR) is a REST-based service that lets you 
-manage the evolution of schema for a logical 'subject', a collection of mutually compatible schemas (the
-'thing' you are managing). The ASR comes with a couple of nice default adapters - zookeeper and a local FS. If you 
-poke around, there is also a JDBC based backend.
+manage the evolution of schema for a logical 'subject', a collection of mutually compatible schemas (the changing 
+schema of the 'thing' you are managing). The ASR comes with a couple of nice default database adapters - zookeeper 
+and a local FS. If you poke around, there is also a JDBC-based backend.
   
-At Fineo we attempt to reach 'zero-ops', choosing instead to rely on hosted services to get us running with 
+At Fineo we try for 'zero-ops', choosing instead to rely on hosted services to get us running with 
 minimum overhead and automating everything else. To that end, we wrote a custom schema store backend on top of
-DynamoDB. AWS does offer a host relational database (RDS), but is managed by the machine, rather than by the request as 
+DynamoDB. AWS also has relational database (RDS), but is managed by the machine, rather than by the request as 
 with Dynamo, leading to more ops that we really wanted. The tradeoff with Dynamo is that we will incur 2-3x write 
-overhead to ensure that we get consistent results [[1](#dynamo-schema-repo)].
+overhead to ensure that we get consistent results [[1](#dynamo-schema-repo)]. 
+
+We are already using Dynamo for our near-realtime store and it has nice NoSQL properties that let us really leverage dynamic field names, so it 
+was a pretty easy choice. Fortunately, ASR has a pretty lightweight requirement on the database adapter and already 
+has a caching strategy, so this was pretty easy to implement (especially using Dynamo's simple ORM tools).
 
 We hope to open source the DynamoDB adapter for ASR soon. Keep an eye out!
 
 ## Avro Schema Repository Access
 
-As we attempt to move to zero-ops, we can actually throw out the REST layer and just query DynamoDB directly using 
-the ASR schema repository api. It still provides all the caching you would expect, but saves us a network hop. 
+Continuing to zero-ops we can actually throw out the REST layer and just query DynamoDB directly using 
+the ASR api[[2](#elastic-beanstalk). It still provides all the caching you would want, but saves us a network hop. 
 Naturally, the trade-off is that we need to be very careful with how we evolve the schema and access patterns, but as
  a small shop with high visibility into the code effects, we made the choice to simplify ops over later complexity.
 
-Keep in mind that the schema repository has two touch points:
-
- * ingest pipeline
- * external webserver for reads + schema management
+Keep in mind that the schema repository has two touch points, (1) the ingest pipeline, where we track new schema and 
+apply existing schema to incoming events, and (2) the external-facing web server, which needs to understand schema to 
+serve reads and for admins to manage the schema.
  
-As essentially stateless services, we can deploy them as need be and even replace the direct DynamoDB access with the
-REST endpoint with minimal code changes. Also talking directly to our Dynamo endpoint gives us the ability to read 
-and use previously unknown fields (discussed later).
+Since these are stateless services, we can deploy them as need be and even replace the direct DynamoDB 
+access with the REST endpoint with minimal code changes (the client now talks to  Also talking directly to our Dynamo 
+endpoint gives us the ability to read and use previously unknown fields (discussed later).
 
 ## Managing multiple entities
 
 As a multi-tenant platform we naturally have to manage multiple customers. Each customer is assigned an Id - a 
-tenantId (did you guess it?) - which is then used to lookup the possible schemas for that customer, each assigned a 
+tenantID (did you guess it?) - which is then used to lookup the possible schemas for that customer, each assigned a 
 schemaID (I know you didn't guess that one). Remember how we mentioned that you can rename things on the fly? Well, 
 that means we can't actually store 'real' names, but instead have to use aliases. These aliases are stored alongside 
-the customer schema so we can manage those aliases directly _as part of the schema_.
+the customer schema so we can manage those aliases directly _as part of the schema_. So the schema for a thing is an 
+instance of a schema.
 
-Let me call that out again - the schema for a given 'object' for a customer is actually a combination of the tenantID
- + schema ID + schema alias(es).  You end up with something like:
+Let me say that again - the schema for a given 'object' for a customer is actually a combination of the tenantID
+ + schema ID + schema alias(es). We have schema for describing a tenant + its known schemas (Metadata) and then each 
+ schema has its own schema (Metric). Then for a given type of 'thing' for a given company, we store instances of the 
+ metadata and each metric. This leads to a schema repository that looks like: 
 
   | subject id | schema |
   |:-----------|--------:|
@@ -117,8 +138,8 @@ Let me call that out again - the schema for a given 'object' for a customer is a
 
 <p/>
 
-Ok, that is going to take some explaning. The Metada.schema and Metric.schema are actually the following Avro 
-schemas[[2](#metric-fields)]:
+Ok, that is going to take some explaining. The Metadata.schema and Metric.schema are actually the following Avro 
+schemas[[3](#metric-fields)]:
 
 {% highlight C %}
  record Metadata {
@@ -129,16 +150,6 @@ schemas[[2](#metric-fields)]:
   record Metric{
     Metadata metadata;
     string metricSchema;
-  }
-
-  record BaseFields{
-    string aliasName;
-    long timestamp;
-    map<string> unknown_fields;
-  }
-
-  record BaseRecord {
-    BaseFields baseFields;
   }
 {% endhighlight %}
 
@@ -174,16 +185,36 @@ they are looking up machine1 or machine1b or machine1c). That will give you some
   }
 {% endhighlight %}
 
-So a machine is actually an instance of a ```Metric```, that has an instance of its own metadata to map canonical field 
-names, keep track of its own name and then store the _schema for the actual customer record_.
+We have a known set of fields that are included in every record, comprising a BaseRecord and its BaseFields:
+
+{% highlight C %}
+  record BaseRecord {
+    BaseFields baseFields;
+  }
+
+  record BaseFields{
+    string aliasName;
+    long timestamp;
+    map<string> unknown_fields;
+  }
+{% endhighlight %}
+
+For now, its enough to understand that this is the basic building block of an 'object' schema. Shortly, we will 
+discuss how its actually used.
+
+### Wait. What are you keeping track of?
+
+A machine is actually an instance of a ```Metric```, that has an instance of its own metadata to map canonical field 
+names, keep track of its own name and then store the _schema for the actual customer record_. This allows us to 
+evolve how we define a generic schema for a tenant or metric, as well as evolving how the schema for a given 'thing' 
+looks.
 
 Using schema to define schema... and then a big of pile of turtles at the bottom :)
 
 Note that Avro's standard aliasing because it only applies to records, which means that every field 
 becomes its own record instance, which quickly gets to be a pain to manage and also prevents easy alias logic reuse. 
-I'm not saying you couldn't do it, it just gets to be a pain.
+I'm not saying you couldn't do it, it just gets to be a pain (left as an exercise to the reader).
  
-
 ## Building schema - modern DDL
 
 The schema for a given field is programmatically built based on what the customer sends us. By using an instance of 
@@ -222,8 +253,8 @@ Which gets remapped via the [Fineo ingest pipeline] to a simple ```BaseRecord```
   }
 {% endhighlight %}
 
-The ```unknown_fields``` then get stored as simple strings in DynamoDB, which we can query out later (through some 
-smart gymnastics) _without having defined any schema or types_. Now at some point later an admin goes in and 
+The ```unknown_fields``` then get stored as simple strings in DynamoDB, which we can read later (through some 
+smart gymnastics) _without having defined any schema or types_. At some point later, an admin goes in and 
 formalizes the schema to types that we talked about. The 'extended ```BaseRecord```' and machine ```Metric``` 
 instance then looks like:
 
@@ -247,11 +278,15 @@ instance then looks like:
 }
 {% endhighlight %}
 
-## Lazy schema - not your grandmother's... schema
+Since we are backing everything by Avro, we can cache schema until we find it is out of date, and only then request a
+ new one. Further, by storing all the fields by tenant and schema, we have a very high throughput, multi-tenant access 
+ that probably doesn't need much of a cache, which backed by DynamoDB gives us highly scalable schema evolution.
+
+## Lazy schema - not your grandmother's...schema
 
 Part of the power of using a NoSQL store is that we can just stuff in fields without having to touch any DB DDL tools
- (schema management really is just DDL). Since we know the field names, we can then later just query what we expect 
- is in there, and have the database tell us what actually is there.
+ (though our schema management really is just DDL). Since we know the field names, we can then later just query what we 
+ expect is in there, and have the database tell us what actually is there.
  
 Our Dynamo extension of the ASR also has support for tracking unknown field names and potential types. When we 
 receive events that have 'unknown fields' we update the unknown fields list for that ```Metric``` type in Dynamo and 
@@ -269,10 +304,15 @@ then write the unknown fields into columns by the customer specified name as sim
 ### Nearline to Offline Query
  
  DynamoDB, and other row stores, act really nicely as a near-line data store. You can write data pretty quickly and 
- don't have to do a lot of expensive work to read relatively large swaths of it back again for small analytics. 
- However, once you come to doing large analytics over a wide time range, these tools start to fall down. Batch 
- computation over columnar stores starts to look a lot better. Enter Redshift - columnar store well-suited to doing 
- analytic style queries. Unfortunately, Redshift isn't completely dynamic, so we need to have some handle on the 
+ don't have to do a lot of expensive work to read relatively large swaths of it back again for smallish analytics 
+ (millons of rows). 
+ 
+ However, once you come to doing large analytics over a wide time range (10s of millions of rows), these tools start to 
+ fall down and more batch-oriented computation over columnar stores starts to look a lot better. 
+ 
+ Enter Redshift - columnar store well-suited to doing analytic style queries.
+ 
+ Unfortunately, Redshift isn't completely dynamic, so we need to have some handle on the 
  types and fields going into it. Thus, we eventually - generally about every month - require that you finally get 
  around to formalizing the schema so we can finish the ingest portion with a large Spark ETL job that does the final 
  step to convert the schematized records from the ingest pipeline into Redshift-ready data.
@@ -284,7 +324,6 @@ then write the unknown fields into columns by the customer specified name as sim
  though more manual that doing a TTL in HBase) and age off old tables, eventually letting us limit the fields we 
  query to just the normalized field. Since we know when the data was written - everything has a timestamp - and when 
  the schema was formalized, we can be very specific about which field name we expect. 
-    
  
 # Enterprise-y extensions
 
@@ -304,7 +343,7 @@ own 'schema change event' (which itself has its own schema). So do queries - on 
 
 As a customer of [Fineo] you can write almost any data your want, whenever you want at pretty much whatever rate you 
 want. We trust Amazon to handle whatever load you can throw at it (they've gotten pretty good) and then load it into 
-our query platform in realtime[[3](#realtime)]. You can then immediately query it, without having someone ahead of 
+our query platform in realtime[[4](#realtime)]. You can then immediately query it, without having someone ahead of 
 time figure out the types or complaining when the wrong fields are sent. 
 
 ## Future Work
@@ -330,11 +369,18 @@ compatible evolutionary nature of Avro schema. We should be able to step through
 serialized with an older schema. In fact, we can keep track of which schema number (schema-id) the data was written 
 with and just use that schema to deserialze data. 
 
-##### 2. Metric Fields
+##### 2. Elastic Beanstalk
+Ok, we could actually use [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/) to do a lot of the ops 
+for us in deploying the web service. However, they is still another moving part. It gets us nice separation and 
+ability to evolve schema, but that seemed minor gains _right now_ compared to the overhead of running another service
+. Of course, as Fineo grows this will not always be the case and the advantage of using a more SOA style architecture
+ will be increasingly compelling.
+
+##### 3. Metric Fields
 We also have the ability to 'hide' fields associated with a machine. This allows us to do 'soft deletes' of the data 
 and then garbage collect them as part of our standard age off process.
 
-##### 3. Realtime
+##### 4. Realtime
 For some definitions of realtime. Currently our ingest pipeline is less than 1 minute, though we have extensions that
  allow querying on data within tens of milliseconds of ingest. Talk to [Jesse](mailto:ceo@fineo.io) if that is 
  something you are interested in.
