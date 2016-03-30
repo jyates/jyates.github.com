@@ -113,7 +113,7 @@ def getPostPath(title)
 end
 
 desc "Makes a new post - rake new <post title>"
-task :new do
+task :newPost do
 	throw "No title given" unless ARGV[1]
 	title = ""
 	ARGV[1..ARGV.length - 1].each { |v| title += " #{v}" }
