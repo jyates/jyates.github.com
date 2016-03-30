@@ -16,7 +16,8 @@ It should not be this hard.
 
 One of the most interesting new pieces of technology that has mostly slipped under the public's radar is the [Amazon Echo] - a remarkably smart tube you put in the middle of your living space. With some of the best voice reconigition and AI we have seen, certainly rivaling Google Now and far surpassing Apple's Siri, it could be the fulcrum around which the Internet of Things (IoT) revolution pivots to enable smart homes for the masses. A recent [Exponent podcast] called out the Echo as being a brilliant play by Amazon to become the hub of the smart home, the driver for everything else, by selling this at-cost little column that has _just enough functionality_, but is positioned as a tool, an enabler, of the rest of the ecosystem (hint: much of AWS is built around the [same idea]).
 
-Right now the Echo, queried with the name "Alexa", is still somewhat limited in functionality. But at $100, its a pretty compelling piece of tech for most nerds. If you are already invested in some other smart homes and know about [IFTTT], you can add voice commands to Alexa that control things like you Nest or Hue lights; it takes a little work, but it can be done by those willing to google a little.
+Right now the Echo, queried with the name "Alexa", is still somewhat limited in functionality. But at $180, its a 
+pretty compelling piece of tech for most nerds. If you are already invested in some other smart homes and know about [IFTTT], you can add voice commands to Alexa that control things like you Nest or Hue lights; it takes a little work, but it can be done by those willing to google a little.
 
 # Other Home Hubs
 
@@ -91,7 +92,7 @@ To quote William Gibson, "the future is here, it's just unevenly distributed".
 [thermostats]: http://www.nest.com
 [lights]: http://www2.meethue.com/ 
 [blinds]: http://www.mysmartblinds.com/
-[Amazon Echo]: www.amazon.com/echo
+[Amazon Echo]: http://www.amazon.com/echo
 [Exponent podcast]: http://exponent.fm/episode-070-is-that-an-echo/
 [same idea]: http://www.allthingsdistributed.com/2016/03/10-lessons-from-10-years-of-aws.html
 [IFTTT]: https://ifttt.com/
