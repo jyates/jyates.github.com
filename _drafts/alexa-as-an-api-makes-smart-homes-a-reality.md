@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Enabling home automation with personal devices
-subtitle: How "smart homes" are so close, yet so far
+title: Alexa as an API makes smart homes a reality
+subtitle: 
 location: San Francisco, CA
 tags: smart home automation, alexa, amazon echo
 ---
@@ -46,19 +46,19 @@ Apple hasn't really done anything to fix that. The AppleTV remote adds a touch p
 
 I'm convinced that screens more than a couple of feet from our faces are inherently harder to use; just think about trying to navigate a mirror of your desktop when you hook up to a presentation... it feels a hundred times harder and _its exactly the same of the screen you use every day!_
 
-Recently, [Samsung had an opportunity to redefine their TV experience] and decided to completely ditch the remote. Instead, the remote is a standard Android tablet they package with the TV and you control everything on the TV through Chromecast.
+Recently, [Vizio had an opportunity to redefine their TV experience] and decided to completely ditch the remote. Instead, the remote is a standard Android tablet they package with the TV and you control everything on the TV through Chromecast.
 
 ### Yes, yes, oh god yes
 
 Chromecast is brilliant. You do all your searching on your phone or on your computer and then get the Chromecast to go to the same URL and stream from there (in most cases, but you can also stream your exact screen over the WiFi). The local screen is the ideal place for search, rather than trying to wave a remote at a screen.
 
-Chromecast then becomes a much more natural implementation of the enterntainment center and the phone as our means to find that entertainment.
+Chromecast then becomes a much more natural implementation of the entertainment center and the phone as our means to find that entertainment.
 
 And what do we have with us all the time? Our phones.
 
 ... except in the home.
 
-Samsung gets around this by getting us to develop new habits around replacing the tablet 'remote control' with some pretty smart psychological hints.
+Vizio gets around this by getting us to develop new habits around replacing the tablet 'remote control' with some pretty smart psychological hints.
 
 ## Smart watches to the rescue
 
@@ -84,17 +84,16 @@ Well, we still have all these different 'smart' devices connected. When each one
 
 Then when you buy those smart blinds, they can find out from your thermostat when you get up and can lower the shades when the thermostat finds its getting too hot (rather than turning on the AC).
 
-All the manufatures need to do is implement the protocol and you pick the hub to which the device connects. From there, we can enable manufacturores to monitor their devices as much as you desire (not at all, minimal functioning, full data) so they can do proactive maintainance, make suggestions and build better products.
+All the manufacturers need to do is implement the protocol and you pick the hub to which the device connects. From there, we can enable manufacturers to monitor their devices as much as you desire (not at all, minimal functioning, full data) so they can do proactive maintenance, make suggestions and build better products.
 
-To quote William Gibson, "the future is here, it's just distributed unevenly".
+To quote William Gibson, "the future is here, it's just unevenly distributed".
 
-
-[thermostats]:
-[lights]: 
-[blinds]:
-[Amazon Echo]:
-[Exponenet podcast]:
-[same idea]: 10 years of aws learnings
-[IFTTT]: 
-[Samsung had an opportunity to redefine their TV experience]:
-[Alexa available to developers]:
+[thermostats]: http://www.nest.com
+[lights]: http://www2.meethue.com/ 
+[blinds]: http://www.mysmartblinds.com/
+[Amazon Echo]: www.amazon.com/echo
+[Exponent podcast]: http://exponent.fm/episode-070-is-that-an-echo/
+[same idea]: http://www.allthingsdistributed.com/2016/03/10-lessons-from-10-years-of-aws.html
+[IFTTT]: https://ifttt.com/
+[Vizio had an opportunity to redefine their TV experience]: http://www.theverge.com/2016/3/22/11279954/vizio-smart-tv-google-cast-tablet-remote-smartcast-app-feature
+[Alexa available to developers]: https://developer.amazon.com/public/solutions/alexa/alexa-voice-service
