@@ -1,6 +1,10 @@
-What's new and interesting? What's worth focusing on?
+---
+layout: post
+title: An investment thesis
+tags: iot, big data, investment, strategy
+---
 
-Periodically, its worth taking a step back and looking at the larger picture. It helps make sure you are doing the right thing, for the right reasons. Doing that every day means nothing gets done, but too infrequently means getting lost in the weeds and, personally, losing a sense of _purpose_ for what your working on.
+What's new and interesting? What's worth focusing on? Its worth taking a step back and looking at the larger picture. It helps make sure you are doing the right thing, for the right reasons. Doing that every day means nothing gets done, but too infrequently means getting lost in the weeds and, personally, losing a sense of _purpose_ for what your working on.
 
 Recently, I stepped back to look at the themes, industries and technology that I'm excited about; things that I think are important & useful, if not just flat out cool.
 

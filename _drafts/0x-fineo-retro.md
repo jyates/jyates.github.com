@@ -6,8 +6,8 @@ tags: startup, retrospective, fail
 
 With any startup, there are inevitably challenges and mistakes made. Looking at back at some of the core misteps I made in starting Fineo, there are three over-arching personal challenges that made quitting inevitable:
 
-* impatience
 * hubris
+* impatience
 * loneliness
 
 compounded by a core mistake of conflating [_hard_ with _valuable_](https://betterhumans.coach.me/how-to-beat-your-hard-equals-valuable-bias-81cb9825f4cb). Oh, and running out of money - that didn't help :)
