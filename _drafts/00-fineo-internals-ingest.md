@@ -1,12 +1,10 @@
 ---
 layout: post
 title: Scaling up for an IoT World
-location: San Francisco, CA
-subtitle:
-tags: aws, time series, scalable, EMR, stream, processing
+tags: iot, aws, time series, scalable, EMR, spark, dynamnodb, stream, processing
 ---
 
-With [Fineo]'s Beta availability [link](https://app.fineo.io), I thought it would be interesting to look at _how_ [Fineo] actually supports IoT-scale ingest and eliminates the need for traditional ETL pipelines and the maintainence of several data stores.
+With [Fineo]'s Beta availability ([link](https://app.fineo.io)), I thought it would be interesting to look at _how_ [Fineo] actually supports IoT-scale ingest and eliminates the need for traditional ETL pipelines and the maintainence of several data stores.
 
 The advent of the Interet of Things (IoT) means almost every industry is generating several orders of magnitude more data than they have ever seen. 'Traditional' web companies are the only place to come close to this scale of data. Unfortunately, the standarde Big Data tools tend to be unwieldy and capital intensive (even though they run on "commodity" hardware). While many companies recognize the potential of Big Data, few can actualize it due to the difficulty finding experts to manage these distributed systems for many industries (i.e. its hard to convince engineers that counting bolts is interesting).
 
