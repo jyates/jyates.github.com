@@ -4,11 +4,6 @@ title: Multi-tenant SQL at Scale
 tags: sql, multi-tenant, big data, drill, spark
 ---
 
-TODO:
- * simple architecture diagram
-
-
-
 Multi-tenancy is an abstraction for a big, hard group of problems that touches on security, scalability, resource consumption and quality of service. Generally attempting to back-fit multi-tenancy is, at best, hacky and less than satifying; at worst, its a recipe for disaster.
 
 With Fineo, we designed for multi-tenancy from the start. Part of that comes from my background at Salesforce, where that baked into everything we did. The other part from the SaaS business model and the desire to scale users super-lineraly to costs (so profit increases with the number of users).
@@ -25,9 +20,9 @@ The unintentional release of data can occurn maliciousl or accidentally through 
 
 In all its dirty glory, here's the entire read architecture:
 
-<img src="/images/posts/mulit-tenant-sql/architecture.png">
+<img src="/images/posts/multi-tenant-sql/architecture.png">
 
-Lets step throught the precautions at each layer.
+Let's step through the precautions at each layer.
 
 ## Layer 0: API Gateway
 
