@@ -8,7 +8,11 @@ layout: default
   <h2 align="left">{{ page.subtitle }}</h2>
   {% endif %}
 
+  {% if page.location %}
   {{ page.date | date:"%B %d, %Y" }} - {{ page.location }}
+  {% else %}
+  {{ page.date | date:"%B %d, %Y" }} - San Francisco, CA
+  {% endif %}
   <p/>
 
   {{content}}
