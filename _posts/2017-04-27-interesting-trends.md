@@ -69,5 +69,6 @@ So, no I don't need an internet connected juicer. And probably no one else does 
 
 The latest startup from Musk deserves its own little section, if only because (as any of my friend's will tell you) having a brain-computer interface has long been a dream of mine (and likely many other nerds). The vision for a company driving the innovations to enable that are terribly exciting and [potentially game changing for a variety of reasons].
 
-That said, we are still a ways away from anything huge. Call it 10 years from sparking a new industry. For folks with the time and money to wait that long, there are few other endeavors I could recommend pursing.
-[potentially game changing for a variety of reasons]: wait but why
+That said, we are still a ways away from anything huge. Call it 10 years from sparking a new industry. For folks with the time and money to wait that long, there are few other endeavors I could recommend pursing. Rememeber, **Tesla started in 2003** when one automaker had a hybrid car and an eletric car hadn't been seen in nearly a decade ([GM's EV1](https://en.wikipedia.org/wiki/General_Motors_EV1)). Fastforward 12 years and every automaker is worried about the rise of electric cars, starting their own production models and nearly everyone has a hybrid.
+
+[potentially game changing for a variety of reasons]: http://waitbutwhy.com/2017/04/neuralink.html
