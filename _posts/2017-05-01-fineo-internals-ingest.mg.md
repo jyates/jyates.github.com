@@ -8,7 +8,7 @@ With [Fineo]'s Beta availability ([link](https://app.fineo.io)), I thought it wo
 
 The advent of the Interet of Things (IoT) means almost every industry is generating several orders of magnitude more data than they have ever seen. 'Traditional' web companies are the only place to come close to this scale of data. Unfortunately, the standarde Big Data tools tend to be unwieldy and capital intensive (even though they run on "commodity" hardware). While many companies recognize the potential of Big Data, few can actualize it due to the difficulty finding experts to manage these distributed systems for many industries (i.e. its hard to convince engineers that counting bolts is interesting).
 
-Finao is a SaaS Big Data platform designed from the ground up for the brave, connected world in which we now find ourselves. Beyond completely elatic scalability with enterprise grade tooling, we are also looking to change how people manage their data with our No ETL tools.
+Fineo is a SaaS Big Data platform designed from the ground up for the brave, connected world in which we now find ourselves. Beyond completely elatic scalability with enterprise grade tooling, we are also looking to change how people manage their data with our No ETL tools.
 
 ## Access
 
