@@ -35,11 +35,11 @@ We leverage a host of AWS services for a couple of reasons:
 1. as we scale up, cost scales with us
 2. operational burdens are nearly zero.
 
-Without futher ado, here is the entire streaming ingest pipeline [2](#2-batch).
+Without futher ado, here is the entire streaming ingest pipeline [[2](#2-batch)].
 
-<img src="/images/posts/fineo_internals/ingest_02-16-16.png" align="left" Vspace="10">
+<img src="/images/posts/fineo-ingest/pipeline.png" align="left" Vspace="10">
 
-Basically, its a light stream processing layer over a standard lamdba architeture.Pretty simple, right? There are some subtle elements of this architecture that give us some pretty fantastic abilities when building for 'enterprise grade' infrastructure.
+Basically, its a light stream processing layer over a standard lamdba architeture. Pretty simple, right? There are some subtle elements of this architecture that give us some pretty fantastic abilities when building for 'enterprise grade' infrastructure.
 
 ### Outside In
 
