@@ -4,10 +4,10 @@ title: Implementing Dynamic Schema At Scale
 tags: schema, dynamodb, scale, big data
 excerpt_separator:  <!--more-->
 ---
-Rehash of the [Dynamic Schema at Scale](/2016/03/09/dynamic-schema-at-scale.html) post for how we things got implemented and a look at how scan's interact with reading schema.
+Rehash of the [Dynamic Schema at Scale](/2016/03/09/dynamic-schema-at-scale.html) for how we implemented reading semi-schematized data from a NoSQL. I touch on the query translation and processing of updating schema.
 <!--more-->
 
-One of the more innovative things we developed at Fineo are our 'No ETL' tools. They enable customers to evolve their schemas at the push of a button, throw out much of the traditional ETL  grunt work and even store and query data without any sort of schema! And that means you can move faster than ever before.
+One of the more innovative things we developed at Fineo are our 'No ETL' infrastructure. Much of this came from the ideas at [stitchfix](http://multithreaded.stitchfix.com/blog/2016/03/16/engineers-shouldnt-write-etl) that engineers shouldn't write ETL, but instead core building blocks enable ETL for the people who care (e.g. data scientists). The Fineo toolkit enables our customers to evolve their schemas at the push of a button, throwing out much of the traditional ETL grunt work. Beyond just eliminating basic transformations, Fineo also enables storing and querying data without any sort of schema! And that means you can move faster than ever before.
 
 Continuing the 'behind the curtain' look at Fineo infrastructure I'm going to dive into how we make dynamic schema possible across our stack.
 
@@ -43,21 +43,7 @@ You don't even need to do any of that schema management until you have time toge
 
 At some point later, you can 'formalize' your schema by defining the expected fields, types and aliases. Formalizing the schema will dramatically speed up any analytics and enable auto-complete queries. However, you can also continue using the alias names for different fields that you had developed before formalizing the schema, so the queries you are already running will continue to run just fine.
 
-# Scan-time, Party Time
-
-Conceptually, we want a way to translate a single column lookup into a lookup for any 'alias' of a column.
-
- <img src="/images/posts/dynamic-schema/scan-schema-remapping.png">
-
-Part of the power of using a NoSQL store is that we can just stuff in fields without having to touch any extensive DB DDL tools (though our schema management really is "DDL as Metadata"). Since we know the field names, we can then later just query what we expect is in there, and have the database tell us what actually is there.
-
-When reading the data back, we push the expected schema down the processing tree to the very edge node. There we process each row to convert each stored column into the expected column. This way, we can leverage the flexibiliy of the NoSQL store, but with the usuability (e.g. sanity) of a schema.
-
-Our Dynamo extension of the ASR also has support for tracking unknown field names and potential types. When we receive events that have 'unknown fields' we update the unknown fields list for that ```Metric``` type in Dynamo and then write the unknown fields into columns by the customer specified name as simple strings. When customers query for fields that have not been formalized they have to provide the expected type of the field. We use this expected type to parse the field and read it into our query engine, but also keep track of the requested type along side the unknown name.
-
-These unknown fields can get be materialized back as simple string fields and then cast by the user into their expected type. When we know the field/type, we can pre-cast the fields from the weak-typing done in DynamoDB into the 'real' types the user expects.
-
-## Avro All Around
+# Avro All Around
 
 The root of our schema management process uses [Apache Avro](http://avro.apache.org/). Avro is great - it has schema evolution, field aliasing and self-describing serialization. Sounds like we are done! Just use Avro everywhere.
 
@@ -73,9 +59,37 @@ We are already using Dynamo for our near-realtime store and it has nice NoSQL pr
 
 We hope to open source the DynamoDB adapter for ASR soon. Keep an eye out!
 
+# Scan-time, Party Time
+
+At Fineo, we wanted to make it as easy as possible to push any and all data into the database and make it instantly queryable. If we are allowing any sort of data going in, we just need a way to undertstand what we have. More specificially, we need a way to translate a single column lookup into a lookup for any 'alias' of a column.
+
+ <img src="/images/posts/dynamic-schema/scan-schema-remapping.png">
+
+Part of the power of using a NoSQL store is that we can just stuff in fields without having to touch any extensive DB DDL tools (though our schema management really is "DDL as Metadata"). Since we know the field names, we can then later just query what we expect is in there, and have the database tell us what actually is there.
+
+When reading the data back, we push the expected schema down the processing tree to the very edge node. There we process each row to convert each stored column into the expected column. This way, we can leverage the flexibiliy of the NoSQL store, but with the usuability (e.g. sanity) of a schema.
+
+A user query can start as:
+
+```
+> SELECT temp from MY_TABLE
+```
+
+and then get translated at the database interface layer to something like:
+
+```
+> SELECT temp, temperature, tmp FROM DYNAMO_TABLE WHERE TENANT_ID = 'some-tenant-id'
+```
+
+And then we select the column that actually has some data for each row (first available wins) to fill contents of the `temp` field to return to the user.
+
+Our Dynamo extension of the ASR has support for tracking unknown field names and potential types. When we receive events that have 'unknown fields' we update the unknown fields list for that ```Metric``` type in Dynamo and then write the unknown fields into columns by the customer specified name as simple strings. When customers query for fields that have not been formalized they have to provide the expected type of the field by casting it (or just accepting a simple string representation, the most common of denominators).
+
+When we know the field/type, we can pre-cast the fields from the weak-typing done in DynamoDB into the 'real' types the user expects.
+
 ## Avro Schema Repository Access
 
-Continuing to zero-ops we can actually throw out the REST layer and just query DynamoDB directly using the ASR api[[2](#elastic-beanstalk)]. It still provides all the caching you would want, but saves us a network hop. Naturally, the trade-off is that we need to be very careful with how we evolve the schema and access patterns, but as a small shop with high visibility into the code effects, we made the choice to simplify ops over later complexity.
+In our drive to achive 'zero-ops' we throw out the ASR REST layer and just query DynamoDB directly using the ASR api[[2](#elastic-beanstalk)]. It still provides all the caching you would want, but saves us a network hop. Naturally, the trade-off is that we need to be very careful with how we evolve the schema and access patterns, but as a small shop with high visibility into the code effects, we made the choice to simplify ops over later complexity.
 
 Keep in mind that the schema repository has two touch points, (1) the ingest pipeline, where we track new schema and apply existing schema to incoming events, and (2) the external-facing web server, which needs to understand schema to serve reads and for admins to manage the schema.
 
