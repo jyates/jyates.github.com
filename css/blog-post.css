@@ -139,7 +139,19 @@ img {
   width: 100%;
 }
 
+
 /* customm sizing for the creative commons tag*/
+
 #creative-commons {
   width: 88px;
+}
+
+h2,
+.h2 {
+  text-decoration: underline;
+}
+
+h3,
+.h3 {
+  font-style: italic;
 }
