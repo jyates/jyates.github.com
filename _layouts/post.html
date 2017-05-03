@@ -15,7 +15,13 @@ layout: default
   {% endif %}
   <p/>
 
-  {{content}}
+  {% if page.excerpt_separator %}
+  {% assign contentArray = page.content | markdownify | split: page.excerpt_separator %}
+  {{ contentArray.last }}
+  {% else %}
+    {{content}}
+  {% endif %}
+
 
   <h3 align="center">-----------</h3>
   <p>Like this sort of stuff? Consider subscribing to my <a href="http://jyates.github.com/atom.xml">RSS feed</a>.
