@@ -18,9 +18,9 @@ At the top layer, we leverage AWS API Gateway to manage the external REST endpoi
 
 # Managing buffers
 
-The core of the fineo write architecture is a series of AWS Kinesis stream, aka a fully managed, 24hr data buffer. Each buffer shard has a write limit of 1MB/sec and read limit of 2MB/sec and costs $0.015/hr and $0.014 per 1M 'put' requests. Again, for a startup this is significantly cheaper and easier than trying to run Apache Kafka on our own. The question is then, "what do we do when deman increases?"
+The core of the Fineo write architecture is a series of AWS Kinesis stream, aka a fully managed, 24hr data buffer. Each buffer shard has a write limit of 1MB/sec and read limit of 2MB/sec and costs $0.015/hr and $0.014 per 1M 'put' requests. Again, for a startup this is significantly cheaper and easier than trying to run Apache Kafka on our own. The question is then, "what do we do when deman increases?"
 
-The writes for each tenant are hashed into the Kinesis shards based on the tenant id and the timestamp, approximately uniformally distributing the events across all the shards. Then we just need to ensure that capacity stays ahead of the demand. Writes per Fineo user are limited to 200 events/sec, so as long as events stay below 5KB each, we can approximately allocate one Kinesis shard per tenant.
+The writes for each tenant are hashed into the Kinesis shards based on the tenant id and the timestamp, approximately uniformly distributing the events across all the shards. Then we just need to ensure that capacity stays ahead of the demand. Writes per Fineo user are limited to 200 events/sec, so as long as events stay below 5KB each, we can approximately allocate one Kinesis shard per tenant.
 
 However, this misses a couple of things.
 
@@ -48,15 +48,15 @@ Because the Firehose copies are done at every stage of the stream processing, we
 
 ## DynamoDB Storage
 
-We spent a bit of time thinking about the DynamoDB schema to ensure that its going to be reasonably scalable and avoid 'hot spots' (the explaination of which is left to another post). Assuming that we have relatively uniform writes and reads, the remaining overhead is then to just ensure that our DynamoDB shard allocation is appropriate to our workload.
+We spent a bit of time thinking about the DynamoDB schema to ensure that its going to be reasonably scalable and avoid 'hot spots' (the explanation of which is left to another post). Assuming that we have relatively uniform writes and reads, the remaining overhead is then to just ensure that our DynamoDB shard allocation is appropriate to our workload.
 
 We leverage time-range grouped tables to partition groups of writes in DynamoDB, allowing us to quickly 'age-off' older data and economically adjust the allocated capacity. The key assumption here is that more recently written data is also the most frequently accessed data. Its easy to go overboard and do something like a table per day, but at a limit of 256 tables, we can quickly run out of tables for production and test environments. At the same time, too few tables means allocating extra capacity to data that is rarely accessed, effectively wasting money. We settles on a table per week.
 
-Now, just like with Kinesis, we need to be able to turn up and down the caapcity of the cluster. There are a couple of tools to do this: [dynamic DynamoDB], that runs a server, or one of many [lambda] [based] [implementations]. I'm partial to lambda functions for ease of deployment, but really its up what fits your deployment model. The only kicker is that DynamoDB can only be _scaled down four times a day_, so you have to be a little judicious in allocating capacity. Since we rely on lambda functions and an idempotent write model, we can support retries and being a little bit slower to scale, saving us money but at the cost of a slightly higher latency for users.
+Now, just like with Kinesis, we need to be able to turn up and down the capacity of the cluster. There are a couple of tools to do this: [dynamic DynamoDB], that runs a server, or one of many [lambda] [based] [implementations]. I'm partial to lambda functions for ease of deployment, but really its up what fits your deployment model. The only kicker is that DynamoDB can only be _scaled down four times a day_, so you have to be a little judicious in allocating capacity. Since we rely on lambda functions and an idempotent write model, we can support retries and being a little bit slower to scale, saving us money but at the cost of a slightly higher latency for users.
 
 # Query Execution
 
-We have two main components to query execution: a query server and an Apache Drill cluster. The query server runs as a simple AWS Elastic Beanstalk java application. Because it is essentially stateless, we can transparently scale up and down the number of servers behind the load balancer based on user demand using standard AWS rules. Upcoming work includes adding client pinning to servers so we can support larger queries that take multiple round-trips.
+We have two main components to query execution: a query server and an Apache Drill cluster. The query server runs as a simple AWS Elastic Beanstalk Java application. Because it is essentially stateless, we can transparently scale up and down the number of servers behind the load balancer based on user demand using standard AWS rules. Upcoming work includes adding client pinning to servers so we can support larger queries that take multiple round-trips.
 
 Apache Drill similarly supports a dynamically scalable cluster. As resource demands grow, we can just add another node to the cluster to pick up the extra work. We trust to decent AWS network architecture to avoid major data locality issues (its all stored in DynamoDB and S3 anyways, so its not going to be local regardless). Similarly, as work drops below a given level, you can decommission. This is more of a manual process or driven by a custom watcher, and can be down via a separate monitoring server or in AWS Lambda, just like with Kinesis and DynamoDB.
 
