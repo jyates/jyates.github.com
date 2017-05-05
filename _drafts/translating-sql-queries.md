@@ -4,7 +4,7 @@ title: Translating SQL queries for schema on NoSQL
 tags: sql, dynamodb, big data, apache drill, schema, metalytics
 ---
 
-Fineo uses a novel semi-schemaful approach to unlock the potential of NoSQL data stores, while simultaneously enabling a 'metalytics' query engine - an engine seamlessly that supports everything from nearline, operational queries (e.g. low latency, small scale) to deep, ad-hoc analytics. Primarily, powered by [Apache Drill] and a complex set of query plan steps, we can find the optimal representation of the data to answer a query and push down work to edge, making answers _fast_.
+Fineo uses a novel semi-schemaful approach to unlock the potential of NoSQL data stores, while simultaneously enabling 'metalytics' queries by providing an engine that seamlessly supports everything from nearline, operational queries (e.g. low latency, small scale) to deep, ad-hoc analytics. Primarily powered by [Apache Drill] and a complex set of query plan steps, we can find the optimal representation of the data to answer a query and push down work to edge, making answers _fast_.
 
 Drill's planning engine is built on [Apache Calcite] - a generic SQL planner and in-memory execution engine. Fineo adds a custom 'storage adapter' that translates queries into a series of transformations, that eventually generates a limited number of plans; the plans vary in the underlying storage they query. For instance, one plan could query all the DynamoDB tables, while another queries one DynamoDB table and a number of S3 directories.
 
@@ -12,7 +12,7 @@ Because we are focusing on the time-series domain, we just need to find the best
 
 <img src="/images/posts/translating-sql-queries/generic-plan-remapping.png">
 
-We manage this with a series of rules and custom 'marker' relations that can only be handled by the Fineo rules to convert the plan in stages. Each stage handles some aspect of the query generation, be it translating the user's schema into queries for underlying storage or finding the right storage components to support the specified time range.
+We force the query optimization process into a set of stages with a set of custom 'marker' relations that can only be handled by the Fineo rules, helping ensure the process remains understandable. Each stage handles some aspect of the query generation, be it translating the user's schema into queries for underlying storage or finding the right storage components to support the specified time range.
 
 <img src="/images/posts/translating-sql-queries/stage-translation.png">
 
@@ -43,7 +43,7 @@ LogicalSort
         LogicalTableScan
 ```
 
-The `FineoRecombinatorMarkerRel` acts as the first gate of translation and the two logical table scans are for the potential read of DynamoDB and S3.
+The `FineoRecombinatorMarkerRel` acts as the first gate of translation and the two logical table scans are for the potential read of DynamoDB and S3. This marker will also eventually get translated into a physical "Recombinator" with the job of recombining the underlying data fields into a coherent, user-facing representation.
 
 # Stage 2: Translating Table Types
 
@@ -63,7 +63,9 @@ We also can inject casts for known fields to the correct type from the underlyin
 
 # Stage 3: Logical Planning
 
-Here we convert the logical relations into relations that Drill can use to generate a query plan that can be translated into a physical plan. Now we actually get into translating logical table scans into a scan of the DynamoDB table(s) and/or the S3 files. Part of the work the rules take up is to attempt to prune the directories or tables to read, based on the timestamp/time-range requested by the user. Fineo has an overlapping range of data between DyanmoDB and S3 that allows to to make that decision. DynamoDB tables cover weekly chunks of data and are removed after a few months; S3 partitioning is down to the day level. We lazily update the S3 storage (the data is already available in DynamoDB), allowing us to merely consult a water-mark for the latest S3 translation and generate potential query plans from there.
+Now we actually get into translating logical table scans into a scan of the DynamoDB table(s) and/or the S3 files. Standard Drill rules also attempt to prune the directories or tables to read, based on the timestamp/time-range requested by the user by 'pushing down' these filters into the respective scans.
+
+The Fineo rules also generate a set of plans to query an overlapping range of data between DyanmoDB and S3, from which the lowest cost plans survives to the next stage. DynamoDB tables cover weekly chunks of data and are removed after a few months; S3 partitions down to the day granularity, but covers all history. We lazily update the S3 storage (the data is already available in DynamoDB), allowing us to merely consult a water-mark for the latest S3 translation and generate potential query plans from there.
 
 For instance, consider that we have the following DynamoDB tables:
 
@@ -114,15 +116,15 @@ Each plan uses progressively more of the underlying S3 storage fields, rather th
 
 Similarly, for a bounded time range we could prune more of the parquet scan down or even eliminate it. Additionally, we can also push down the time-range into the DynamoDB request, generating very specific query timeranges for the tenant, further limiting the amount of data that is read.
 
-In this stage we also have some 'push down' rules that allow any user projections (e.g. `SELECT field1 ...` would become Projection relation on `field`) or filters to pass through our recombinator and into the underlying scan, again helping to limit the amount of data necessary to fulfill the user's request.
+In this stage we also have some 'push down' rules that allow any user projections (e.g. `SELECT field1 ...` would become Projection relation on `field`) or filters to pass through our Recombinator and into the underlying scan, again helping to limit the amount of data necessary to fulfill the user's request.
 
 All of this translation is managed by a custom rule that executes against an injected 'rel' that can only be removed by the rule; there is only one valid path to process the query plan to the next 'stage' and it has to go through each custom rule.
 
 We rely on Drill to select the lowest cost plan, based on the expected cost of each plan in CPU, memory, and network use.
 
-# Stage 4: Physical Planning
+# Stage 4: Physical Planning & Execution
 
-Here, Drill translate the the logical plan into a physical execution plan; this plan can be pushdown down the Drill worker nodes and executed in a tree. Drill is very good about minimizing the time to a result by generating optimized code for each query and ubiquitously leveraging zero-copy buffers.
+Finally, the logical plan is converted into a physical execution plan; this plan can be pushdown down the Drill worker nodes and executed in a tree. Drill is very good about minimizing the time to a result by generating optimized code for each query and ubiquitously leveraging zero-copy buffers.
 
 The main work for Fineo is the in the `FineoRecombinator`. When we execute the plan we turn the dynamic column results for each underlying table into a coherent set of columns for the user, based on the schema we loaded at the start of the query planning. For instance, dynamo might return a row with the values:
 
