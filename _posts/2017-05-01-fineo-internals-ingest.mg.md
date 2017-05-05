@@ -105,6 +105,8 @@ Our cutting edge dynamic schema support brings the flexibility of NoSQL into a m
 
 Really good ideas never seem to be uniquely developed - also true of quite a few bad ones - and such seems to be the case here. Our ingest pipeline looks a heck of a lot like Netflix and our DynamoDB schema looks similar to a common IoT style use case. However,we have some twists that make [Fineo] eminently attractive: SQL access, enterprise security and availability, low latency query and dynamic schema.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [implementing dynamic schema](/2017/05/02/implementing-dynamic-schema.html).
+
 # Notes
 ## 1-costs
 With economies of scale it can be much cheaper to run your own services, rather than leveraging SaaS. You are paying a premium for someone else to deal with managing the service - keeping it up, running quickly, etc - so you can focus on your business. In fact, this is the same logic for why you want want to use [Fineo] in the first place; we handle all the glue and management so you can focus on using the data.

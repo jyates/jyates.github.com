@@ -256,9 +256,7 @@ While this gets you pretty far, we do see somethings that we think customers wou
  * advanced sanitization and transformation
  * missing field alerts
 
-Please let me know in the comments or [email me](mailto:ceo@fineo.io) if there is anything else you would want to see!
-
-[Fineo] is also selecting its early **beta customers** so please [reach out](mailto:ceo@fineo.io) if you are interested in getting involved in our upcoming rollout.
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [translating SQL queries](/2017/05/05/translating-sql-queries.html).
 
 #### Notes
 
