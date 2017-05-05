@@ -4,19 +4,19 @@ title: Multi-tenant SQL at Scale
 tags: sql, multi-tenant, big data, drill, spark
 ---
 
-Multi-tenancy is an abstraction for a big, hard group of problems that touches on security, scalability, resource consumption and quality of service. Generally attempting to back-fit multi-tenancy is, at best, hacky and less than satifying; at worst, its a recipe for disaster.
+Multi-tenancy is an abstraction for a big, hard group of problems that touches on security, scalability, resource consumption and quality of service. Generally attempting to back-fit multi-tenancy is, at best, hacky and less than satisfying; at worst, its a recipe for disaster.
 
-With Fineo, we designed for multi-tenancy from the start. Part of that comes from my background at Salesforce, where that baked into everything we did. The other part from the SaaS business model and the desire to scale users super-lineraly to costs (so profit increases with the number of users).
+With Fineo, we designed for multi-tenancy from the start. Part of that comes from my background at Salesforce, where that baked into everything we did. The other part from the SaaS business model and the desire to scale users super-linearly to costs (so profit increases with the number of users).
 
-My biggest concern was making sure that user data was completely inacessible to other tenants, while physically co-located. Combined with that, I wanted to ensure that access was fast on a per-user basis. Finally, I also wanted to ensure that we could easily fork a single tenant environment or migrate a group of users with zero downtime.
+My biggest concern was making sure that user data was completely inaccessible to other tenants, while physically co-located. Combined with that, I wanted to ensure that access was fast on a per-user basis. Finally, I also wanted to ensure that we could easily fork a single tenant environment or migrate a group of users with zero downtime.
 
 # Confused Deputy Problem
 
-Ensuring that a user is authenticated on the 'hard shell' of a system is a relatively easy problem handled in standard web architectures with things like LDAP or one of many user authentication tools. However, it is crucial to ensure these credentials are passed through a multi-tenant application to ensure that sub-layers cannot inadvertanely allow a user access (through bugs or malicious use) to unapproved data. This is known as the confused deputy problem, or as wikipedia puts it:
+Ensuring that a user is authenticated on the 'hard shell' of a system is a relatively easy problem handled in standard web architectures with things like LDAP or one of many user authentication tools. However, it is crucial to ensure these credentials are passed through a multi-tenant application to ensure that sub-layers cannot inadvertently allow a user access (through bugs or malicious use) to unapproved data. This is known as the confused deputy problem, or as wikipedia puts it:
 
 [A confused deputy is a computer program that is innocently fooled by some other party into misusing its authority.](https://en.wikipedia.org/wiki/Confused_deputy_problem)
 
-The unintentional release of data can occurn maliciousl or accidentally through a bug, but I wanted to ensure that at every level user data was segregated and required information from the level above to provide access, avoiding any leakage.
+The unintentional release of data can occur maliciously or accidentally through a bug, but I wanted to ensure that at every level user data was segregated and required information from the level above to provide access, avoiding any leakage.
 
 In all its dirty glory, here's the entire read architecture:
 
@@ -28,7 +28,7 @@ Let's step through the precautions at each layer.
 
 At the very edge, Fineo uses the AWS API Gateway to handle all of our authentication and simple access control. Each device has an access/secret key pair used to sign requests, while users credential (username/password) are managed via AWS Cognito.
 
-This outer layer ensures that we don't have un-authorized access. We plan to move to an internal authentication serivce as a cost saving measure, but for now, AWS provides a quick and easy way to get going fast.
+This outer layer ensures that we don't have unauthorized access. We plan to move to an internal authentication service as a cost saving measure, but for now, AWS provides a quick and easy way to get going fast.
 
 ## Layer 1: REST Service
 
@@ -50,7 +50,7 @@ Additionally, all table metadata is translated from the multi-tenant schema stor
 
 Fineo transparently leverages two different data storage layers to enable both low-latency, row-oriented queries (what happen in the last 5 seconds?) as well as deep, cross cutting analytics and ad-hoc data science (what's the average number of users with at least 10 interactions in the last 5 years?). The disparity in _type_ of query also predicates a disparity in the _type of storage_.
 
-To handle the low-latency queries, we turn to Amazon DynamoDB with a tenant and time-timestamp oriented schema. Analytic style queries are handled via [Apache Parquet] columnar-formatted files , stored in S3.
+To handle the low-latency queries, we turn to Amazon DynamoDB with a tenant and timestamp oriented schema. Analytic style queries are handled via [Apache Parquet] columnar-formatted files , stored in S3.
 
 Our goal was to build the simplest system we could that supported a broad range of use cases.
 
@@ -70,7 +70,7 @@ To access any data, you must provide the tenant API Key and the logical id (from
 
 This schema also ensures that access to different logical tables for the user (i.e. one for each of their products, like 'temperature senors' or 'vacuums') is fast, since user/table data is:
 
- - being colocated
+ - being co-located
  - ordered by timestamp (our 'primary' key - it's a timeseries platform).
 
 The chances of two tenants accessing the same dynamo instance are very slight and even less of a concern given a stable auto-capacity monitoring and management layer (running out of read capacity? automatically turn up the server capacity!).
@@ -93,9 +93,9 @@ S3 storage is also notably cheaper than running an online database and provides 
 
 # Per Tenant Deployment
 
-A single tenant deployment can be necessary when the tenant has specific requirements around security (e.g. custom keys) or data comingling, among many other reasons. We built this into the architecture from the start and ensure that every single pre-production test run also executes against a single-tenant architecture (exact same calls, different backend), even if we didn't have that requirement yet.
+A single tenant deployment can be necessary when the tenant has specific requirements around security (e.g. custom keys) or data commingling, among many other reasons. We built this into the architecture from the start and ensure that every single pre-production test run also executes against a single-tenant architecture (exact same calls, different backend), even if we didn't have that requirement yet.
 
-The core separation for a single tenant came in the REST layer (Layer 1). Here, the tenant's API Key was required to match one and only one api key (rather than just matching the one assigned to that user) bound to the server's deployment. If the API doesn't match, then the request is rejected. Otherwise, we use the same separation described above in query exection and data storage, but on physically separate resources.
+The core separation for a single tenant came in the REST layer (Layer 1). Here, the tenant's API Key was required to match one and only one api key (rather than just matching the one assigned to that user) bound to the server's deployment. If the API doesn't match, then the request is rejected. Otherwise, we use the same separation described above in query execution and data storage, but on physically separate resources.
 
 # Zero Downtime Migration
 
@@ -109,7 +109,7 @@ Note that S3 doesn't actually need to be 'migrated' because it is already tenant
 
 ## Physical Migration
 
-If we need to move a tenant to another location, for instance because they want even lower latency accees, it's a similar activity. We start with a bulk copy of the S3 data to the new region. All new writes get sent to the new tables, while reads will be done from both the old and new tables (similar to in-place). However, because these are geographically distributed, this is notably painful solution - AWS egress data costs hurt and latency will be generally very bad.
+If we need to move a tenant to another location, for instance because they want even lower latency access, it's a similar activity. We start with a bulk copy of the S3 data to the new region. All new writes get sent to the new tables, while reads will be done from both the old and new tables (similar to in-place). However, because these are geographically distributed, this is notably painful solution - AWS egress data costs hurt and latency will be generally very bad.
 
 However, we can backfill the 'new' tables from the S3 files that overlap the time-range that is not aged off. At the same time, we can do copies of the current table in the background to 'catch up' any data that has not been converted to long term-storage.
 

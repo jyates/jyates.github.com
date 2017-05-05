@@ -4,7 +4,7 @@ title: Translating SQL queries for semi-schema
 tags: sql, dynamodb, big data, apache drill, schema, metalytics
 ---
 
-Fineo uses a novel semi-schemaful approach to unlock the potential of NoSQL data stores, while simlutaneously enabling a 'metalytics' query engine - an engine seamlessly that supports everything from nearline, operational queries (e.g. low latency, small scale) to deep, ad-hoc analytics. Primarly, powered by [Apache Drill] and a complex set of query plan steps, we can find the optimal representation of the data to answer a query and push down work to edge, making answers _fast_.
+Fineo uses a novel semi-schemaful approach to unlock the potential of NoSQL data stores, while simultaneously enabling a 'metalytics' query engine - an engine seamlessly that supports everything from nearline, operational queries (e.g. low latency, small scale) to deep, ad-hoc analytics. Primarily, powered by [Apache Drill] and a complex set of query plan steps, we can find the optimal representation of the data to answer a query and push down work to edge, making answers _fast_.
 
 Drill's planning engine is built on [Apache Calcite] - a generic SQL planner and in-memory execution engine. Fineo adds a custom 'storage adapter' that translates queries into a series of transformations, that eventually generates a limited number of plans; the plans vary in the underlying storage they query. For instance, one plan could query all the DynamoDB tables, while another queries one DynamoDB table and a number of S3 directories.
 
@@ -12,7 +12,7 @@ Because we are focusing on the time-series domain, we just need to find the best
 
 <img src="/images/posts/translating-sql-queries/generic-plan-remapping.png">
 
-We manage this with a series of rules and custom 'marker' relations that can only be handled by the Fineo rules to convert the plan in stages. Each stage handles some aspect of the query generation, be it translating the user's schema into queries for underyling storage or finding the right storage components to support the specified time range.
+We manage this with a series of rules and custom 'marker' relations that can only be handled by the Fineo rules to convert the plan in stages. Each stage handles some aspect of the query generation, be it translating the user's schema into queries for underlying storage or finding the right storage components to support the specified time range.
 
 <img src="/images/posts/translating-sql-queries/stage-translation.png">
 
@@ -26,7 +26,7 @@ A user query can start as:
 > SELECT temp from MY_TABLE
 ```
 
-and then get translated at the database interface layer to something like (we also enfore the tenant id for all results)
+and then get translated at the database interface layer to something like (we also enforce the tenant id for all results)
 
 ```
 > SELECT temp, temperature, tmp FROM FINEO_TABLE WHERE tenant_id = 'some-tenant-id'
@@ -47,7 +47,7 @@ The `FineoRecombinatorMarkerRel` acts as the first gate of translation and the t
 
 # Stage 2: Translating Table Types
 
-The next stage tanslates the logical table types to actual queries on the underyling engine reads. Here, we inject tenant, metric and time range filters based on the query. We also expand the original query fields into the full range of potential field names.
+The next stage translates the logical table types to actual queries on the underlying engine reads. Here, we inject tenant, metric and time range filters based on the query. We also expand the original query fields into the full range of potential field names.
 
 ```
 LogicalSort
@@ -114,15 +114,15 @@ Each plan uses progressively more of the underlying S3 storage fields, rather th
 
 Similarly, for a bounded time range we could prune more of the parquet scan down or even eliminate it. Additionally, we can also push down the time-range into the DynamoDB request, generating very specific query timeranges for the tenant, further limiting the amount of data that is read.
 
-In this stage we also have some 'push down' rules that allow any user projections (e.g. `SELECT field1 ...` would become Projection relation on `field`) or filters to pass through our recombinator and into the underlying scan, again helping to limit the amount of data necessary to fullfil the user's request.
+In this stage we also have some 'push down' rules that allow any user projections (e.g. `SELECT field1 ...` would become Projection relation on `field`) or filters to pass through our recombinator and into the underlying scan, again helping to limit the amount of data necessary to fulfill the user's request.
 
 All of this translation is managed by a custom rule that executes against an injected 'rel' that can only be removed by the rule; there is only one valid path to process the query plan to the next 'stage' and it has to go through each custom rule.
 
 We rely on Drill to select the lowest cost plan, based on the expected cost of each plan in CPU, memory, and network use.
 
-# Stage 4: Phyiscal Planning
+# Stage 4: Physical Planning
 
-Here, Drill translate the the logical plan into a physical execution plan; this plan can be pushdown down the Drill worker nodes and executed in a tree. Drill is very good about minimizing the time to a result by generating optimized code for each query and ubiquoutsly leveraging zero-copy buffers.
+Here, Drill translate the the logical plan into a physical execution plan; this plan can be pushdown down the Drill worker nodes and executed in a tree. Drill is very good about minimizing the time to a result by generating optimized code for each query and ubiquitously leveraging zero-copy buffers.
 
 The main work for Fineo is the in the `FineoRecombinator`. When we execute the plan we turn the dynamic column results for each underlying table into a coherent set of columns for the user, based on the schema we loaded at the start of the query planning. For instance, dynamo might return a row with the values:
 
@@ -147,7 +147,7 @@ based on selecting the first non-null value for the user-visible columns. We ens
 
 # Summary
 
-Fineo provides an novel layer of schema flexibility that helps users unlock the power of NoSQL data stores - the flexibility and speed of development. Free to change the data model or absorb mistabkes, users can focus on deriving value from that data, rather than trying to clean it and put it into the right place. Simultaneously, Fineo also enables an unheard of range of queries in a single API because we can dynamically select the optimal representation and push down multiple components to make queries return _blazingly fast_.
+Fineo provides an novel layer of schema flexibility that helps users unlock the power of NoSQL data stores - the flexibility and speed of development. Free to change the data model or absorb mistakes, users can focus on deriving value from that data, rather than trying to clean it and put it into the right place. Simultaneously, Fineo also enables an unheard of range of queries in a single API because we can dynamically select the optimal representation and push down multiple components to make queries return _blazingly fast_.
 
 [Apache Drill]: https://drill.apache.org
 [Apache Calcite]: https://calcite.apache.org
