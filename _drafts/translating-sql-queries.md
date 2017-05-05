@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Translating SQL queries for semi-schema
+title: Translating SQL queries for schema on NoSQL
 tags: sql, dynamodb, big data, apache drill, schema, metalytics
 ---
 
