@@ -4,6 +4,11 @@ title: Handling overlapping timestamps in DynamnoDB
 tags: iot, dynamodb, big data, timestamp
 ---
 
+TODO:
+* add link from multi-tenant sql
+  * in body
+  * at end
+
 Time is the major component of IoT data storage. You have to be able to quickly traverse time when doing any useful operation on IoT data (in essence, IoT data is just a bunch of events over time).
 
 At Fineo we selected DynamoDB as our near-line data storage (able to answer queries about the recent history with a few million rows very quickly). Like any data store, DynamoDB has its own quirks. The naive, and commonly recommend, implementation of DynamoDB/Cassandra for IoT data is to make the timestamp part of the key component (but not the leading component, avoiding hot-spotting). Managing aging off data is generaly done by maintaining tables for a specific chunk of time and deleting them when they are too old.

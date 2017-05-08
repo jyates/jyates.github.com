@@ -151,5 +151,7 @@ based on selecting the first non-null value for the user-visible columns. We ens
 
 Fineo provides an novel layer of schema flexibility that helps users unlock the power of NoSQL data stores - the flexibility and speed of development. Free to change the data model or absorb mistakes, users can focus on deriving value from that data, rather than trying to clean it and put it into the right place. Simultaneously, Fineo also enables an unheard of range of queries in a single API because we can dynamically select the optimal representation and push down multiple components to make queries return _blazingly fast_.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [multi-tenant SQL security in-depth](/2017/05/08/multi-tenant-sql.html).
+
 [Apache Drill]: https://drill.apache.org
 [Apache Calcite]: https://calcite.apache.org
