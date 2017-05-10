@@ -155,3 +155,10 @@ h3,
 .h3 {
   font-style: italic;
 }
+
+/** Subtitle h2 needs better font **/
+#subtitle {
+  text-decoration: none;
+  font-style: oblique;
+  color: grey;
+}

@@ -60,7 +60,7 @@ Our goal was to build the simplest system we could, that supported a broad range
 
 Choose to use DynamoDB because it was a fully-managed data store (saving huge operations overhead), wildly scalable, row oriented and supported a good amount of operator pushdown.
 
-As a time-series oriented service, we still had to do a bunch of work around aging off older data (time-range tables) and managing data recency with write-time tables [post coming on Wednesday with details].
+As a time-series oriented service, we still had to do a bunch of work around aging off older data (time-range tables) and managing data recency with write-time tables (see [Using DynamoDB for Time Series Data] for more info).
 
 The trick then is figuring out the correct schema to ensure that tenant are separated, access is fast and not impacted by other tenants. The schema we came up with was not ground breaking:
 
@@ -123,7 +123,11 @@ At the end, asynchronously turn off the access to the 'old' table and return to 
 
 When designing for multi-tenancy, its best to build it in from the beginning. It's easy to setup per-tenant instances/infrastructure, but tends to lose when considering the bottom line. Instead, you need to carefully consider how to logically separate data while preserving a high quality of service, eventual migration and preventing unauthorized access - even unintentionally.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [Using DynamoDB for Time Series Data].
+
 [Apache Parquet]: https://parquet.apache.org/
 [Glacier]: https://aws.amazon.com/glacier/
 [Apache Calcite]: https://calcite.apache.org
 [Apache Drill]: https://drill.apache.org
+[Fineo]: https://fineo.io
+[Using DynamoDB for Time Series Data]: /2017/05/10/dynamo-for-time-series.html
