@@ -108,7 +108,10 @@ That said, managing IoT and time-series data is entirely feasible with Dynamo. T
 
 Or you could just [use Fineo] for your IoT data storage and analytics, and save the engineering pain :)
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [Scaling Out Fineo].
+
 [Apache HBase]: https://hbase.apache.org
 [Apache Drill]: https://drill.apache.org
 [use Fineo]: https://fineo.io
 [Fineo]: https://fineo.io
+[Scaling Out Fineo]: /2017/05/12/scaling-out-fineo.html

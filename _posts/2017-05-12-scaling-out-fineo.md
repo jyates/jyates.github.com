@@ -72,6 +72,7 @@ Apache Drill similarly supports a dynamically scalable cluster. As resource dema
 
 At Fineo we designed for scalability from the beginning, while still remaining cost effective. By thinking about not only how we are going to scale now, but also what that is going to cost and how to support the same (or better) scalability down the road _at a lower cost_, we can move at startup speed and cost. By separating out the architecture into different layers and ensuring that they are independently scalable ensured that we have no bottlenecks. Since we are a small shop, it was imperative that we cut down on operations work, so we could focus on building new features and growing the business. In leveraging full-managed services and auto-scalability monitors we not only freed up our time, but run a better service at a lower cost.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [Supporting Schema Evolution and Addition].
 
 [Fineo ingest post]: /2017/05/01/fineo-internals-ingest.mg.html
 [AWS Kinesis Autoscaling Util]: https://github.com/awslabs/amazon-kinesis-scaling-utils
@@ -79,3 +80,5 @@ At Fineo we designed for scalability from the beginning, while still remaining c
 [lambda]: https://github.com/rockeee/dynamic-dynamodb-lambda
 [based]: https://github.com/channl/dynamodb-lambda-autoscale
 [implementations]: https://github.com/trek10inc/dynamodb-autoscaling
+[Fineo]: https://fineo.io
+[Supporting Schema Evolution and Addition]: /2017/05/15/supporting-schema-evolution-and-addition.html
