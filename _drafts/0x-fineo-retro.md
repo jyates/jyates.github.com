@@ -4,6 +4,11 @@ title: Looking back on Fineo
 tags: startup, retrospective, fail
 ---
 
+TODO:
+  - look at how business model was flawed. 
+    - product improvement vs. disruption
+    - competition vs. growing new customers
+
 With any startup, there are inevitably challenges and mistakes made. Looking at back at some of the core misteps I made in starting Fineo, there are three over-arching personal challenges that made quitting inevitable:
 
 * hubris
