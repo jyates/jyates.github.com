@@ -64,7 +64,9 @@ Of course, many of these systems intertwine, so its then incumbent upon everyone
 
 To paraphrase from Ben Thompson, _anything taken to its extreme inherently becomes no longer that thing_. For instance, democracy to its extreme is mob rule. However, when looking at the extreme of the _goals_ of democracy we see fair governing of a people based on their needs and desires (something that inherently doesn't look like mob rule).
 
-So maybe it comes down to keeping in mind the right metrics of success, not the existing system within which are operating.
+So maybe it comes down to keeping in mind the right metrics of success, not the existing system within which are operating. Any making those end goals understood across the organization. 
+
+Maybe? Still working on this one...
 
 ## Notes
 
