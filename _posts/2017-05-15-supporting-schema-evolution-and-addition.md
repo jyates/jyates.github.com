@@ -37,7 +37,7 @@ Since we know the 'type' of each column/field in each event, we can store them i
      /day
 ```
 
-Unfortunately, there is not a lot of inter-operability support between Apache Spark (batch processing engine) and Apache Drill (read engine). This means that writing partitioned data with Spark will not be readable by Apache Drill (this is because Spark writes partitions as key=value and Drill reads partitions as a nested hierarchy of value1,value2, etc.). That means we also have to extract the components of the timestamp and into the sub-partitions we want, construct those directories manually and write the Parquet data into the output directory.
+Unfortunately, there is not a lot of interoperability support between Apache Spark (batch processing engine) and Apache Drill (read engine). This means that writing partitioned data with Spark will not be readable by Apache Drill (this is because Spark writes partitions as key=value and Drill reads partitions as a nested hierarchy of value1,value2, etc.). That means we also have to extract the components of the timestamp and into the sub-partitions we want, construct those directories manually and write the Parquet data into the output directory.
 
 Basically, we manually create the time-based partitioning. A bit hacky, but it works.
 
@@ -45,7 +45,7 @@ Basically, we manually create the time-based partitioning. A bit hacky, but it w
 
 Each well-formatted row is bound to a specific 'metric type' (think user-visible table), but  schema-less columns are those columns but have not been formally added to the schema. We know the event is bound to a particular metric type (its required to be a valid row), but we don't know how that field fits in with the schema - what is its type, is it an alias of an existing column?
 
-These kinds of fields occur when you have changing data and don't update the schema, either out of laziness or from a mispelling (e.g. a 'fat finger' mistake). In many systems, this unknown column will be a surprise and can either break your pipeline or get thrown out - bad outcomes either way. Generally, this requires going upstream to fix the mistake at the source (often painful and takes a long time), or requires lots of special casing code in your ETL codebase.
+These kinds of fields occur when you have changing data and don't update the schema, either out of laziness or from a misspelling (e.g. a 'fat finger' mistake). In many systems, this unknown column will be a surprise and can either break your pipeline or get thrown out - bad outcomes either way. Generally, this requires going upstream to fix the mistake at the source (often painful and takes a long time), or requires lots of special casing code in your ETL codebase.
 
 Fineo is built to handle this sort of change gracefully and without interruption.
 
@@ -68,9 +68,11 @@ This allows us to easily query either the JSON and/or Parquet formated data. At 
 
 Moving data to an offline, columnar storage allows us to efficiently support analytics queries. At the same 'time', time-partitioning allows fast answers on a very wide range of events because we can quickly pinpoint the range of data to access. But you can get that with a ton of existing systems (Hive, Kudu, etc.). The magic lies in how to support a fast-changing enterprise and dataset with features like column aliasing and renaming, and late/async-binding schema, so **you can go faster, while doing less**.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [Error Handling and User Notification].
 
 [Fineo]: https://fineo.io
 [Apache Drill]: https://drill.apache.org
 [Apache Spark]: https://spark.apache.org
 [Apache Parquet]: https://parquet.apache.org
 [Lambda Architecture]: http://lambda-architecture.net/
+[Error Handling and User Notification]: /2017/05/17/handling-fineo-errors.html
