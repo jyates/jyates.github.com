@@ -1,10 +1,12 @@
 ---
 layout: post
-title: Self-Improving Architecture and Design
+title: Interlude: Self-Improving Architecture and Design
 tags: startup, design, architecture
 ---
 
-The idea of a self-improving system where the actors in and around the system are incentivized to continually improve the system is very enticing. I wanted to look at can this be extending to a code base? Or within a company? I want architecture of the system to dictate the _lowest cost/lowest energy_ action to take within the system is also the _best_ choice for the system. This exploration was sparked by a recent episode of the Exponent podcast (specifically: [exponent #110 - 10:45](http://exponent.fm/episode-110-moral-hazard/)) discussed the conditions around how democracy in the 1930's was incentivized to continue to improve democracy; it was in the best interest of the politicians (actors within the system) to continue to safeguard or improve the core system of democracy in the face of new technology.
+A short break from the Fineo architecture. Recently get for the thinking about self-improving systems. Specifically, I liked the idea of a self-improving system where _the actors in and around the system_ are incentivized to continually improve the system. This makes sense in context of a business or company, but can this be extending to a software code base?  I want architecture of the system to dictate the _lowest cost/lowest energy_ action to take within the system is also the _best_ choice for the system. 
+
+This exploration was sparked by a recent episode of the Exponent podcast (specifically: [exponent #110 - 10:45](http://exponent.fm/episode-110-moral-hazard/)) discussed the conditions around how democracy in the 1930's was incentivized to continue to improve democracy; it was in the best interest of the politicians (actors within the system) to continue to safeguard or improve the core system of democracy in the face of new technology.
 
 The concern was over ability to maintain democracy when considering the rules for partitioning radio air space so it couldn't be monopolized. A monopoly on the airwaves in a region would allow one entity to control the flow of information, effectively hamstringing the democratic processes.  With the advent of the changes - new tech in radio - we not only preserved the state of the system, but actually sought to improve the system through changes and it _was the easiest way to make the changes_ (otherwise they would have been voted out of office, or so they thought).
 
