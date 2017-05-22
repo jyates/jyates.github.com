@@ -82,7 +82,10 @@ While we support simple SQL queries sent to a REST endpoint, I didn't want to ov
 
 When you have a hammer, everything looks like a nail, but sometimes they _actually are nails_. With [Fineo] error management, we had a very clean integration with our existing infrastructure that let us implement a complete error analysis solution in under two weeks, from inception to deployment. And best of all? It fit well within our current user's mental model and solved their issues.
 
+Want to learn more about the [Fineo] architecture? Check out the next post in the series: [Building a Continuous Integration Pipeline with Jenkins on AWS].
+
 [Fineo]: https://fineo.io
 [AWS Athena]: https://aws.amazon.com/athena/
 [ElasticSearch]: https://www.elastic.co/
 [Apache Drill]: https://drill.apache.org
+[Building a Continuous Integration Pipeline with Jenkins on AWS]: /2017/05/22/cf-jenkins-pipelines.html
