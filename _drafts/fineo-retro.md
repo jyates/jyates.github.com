@@ -32,11 +32,9 @@ Starting a company was something I'd always wanted to try and had saved money fo
 
 I looked around at the burgeoning IoT market and thought,
 
-{% quote %}
-That's the next big data challenge.
-Surely what we were doing at Salesforce is applicable out there.
-Managing and leveraging all the data is certainly going to be hard.
-{% endquote %}
+  That's the next big data challenge.
+  Surely what we were doing at Salesforce is applicable out there.
+  Managing and leveraging all the data is certainly going to be hard.
 
 So, I started working on an idea I had been percolating to build a fast SQL data analytics tool for streaming and scalable data. Certainly seemed challenging and a whole lot more interesting that what I was working on previously.
 
@@ -157,12 +155,8 @@ However, we are still looking at a relatively modular play, in an integrated mar
 
 But there is also a core problem in a data Platform-as-a-Service (PaaS) - few companies are willing to give their data to a startup. They can lose it, are probably likely to go down and might not even be around in 6 months.
 
-{% highlight ruby %}
-
-It feels like everyone is racing to provide the shovels,
-while there are relatively few people actually digging for gold
-
-{% endhighlight %}
+  It feels like everyone is racing to provide the shovels,
+  while there are relatively few people actually digging for gold
 
 The only people that can take that risk are startups themselves, but they are rarely going to need to scale benefits of Fineo that are so core to what we offered. So, why trust a startup when I could easily run MongoDB or Postgres for much of my data; at a bigger scale, I could turn to plenty of big companies (Samsung, AT&T, Google) that provide time-series database-as-a-service offerings.
 
