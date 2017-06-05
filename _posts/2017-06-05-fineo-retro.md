@@ -155,8 +155,8 @@ However, we are still looking at a relatively modular play, in an integrated mar
 
 But there is also a core problem in a data Platform-as-a-Service (PaaS) - few companies are willing to give their data to a startup. They can lose it, are probably likely to go down and might not even be around in 6 months.
 
-  It feels like everyone is racing to provide the shovels,
-  while there are relatively few people actually digging for gold
+    It feels like everyone is racing to provide the shovels,
+    while there are relatively few people actually digging for gold
 
 The only people that can take that risk are startups themselves, but they are rarely going to need to scale benefits of Fineo that are so core to what we offered. So, why trust a startup when I could easily run MongoDB or Postgres for much of my data; at a bigger scale, I could turn to plenty of big companies (Samsung, AT&T, Google) that provide time-series database-as-a-service offerings.
 
@@ -175,7 +175,7 @@ But I'm getting tired and stopped having fun a long time ago.
 
 # Retrospective
 
-What would I have done differently? A whole hell of a lot.
+What would I have done differently? A whole hell of a lot, but the core of it comes down to the fact hard isn't necessarily valuable - customers are the determinant of what's valuable.
 
 Basically, I did everything completely backwards. **Just wanting to start a company and having a couple of indicators you are on the right path _isn't enough_**. Here's the order I'd try next time:
 

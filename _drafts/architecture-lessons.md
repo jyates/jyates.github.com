@@ -5,6 +5,8 @@ location: San Francisco, CA
 tags: aws, architecture, scale, iot, database, hadoop
 ---
 
+Some things are hard, some things are harder.
+
  * Go slow to go fast
    * Invest upfront on CI/CD tools and architecture to help make iteration & improvement faster later. It's a balance though.
  * Leverage managed services whenever possible

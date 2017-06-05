@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Building Up Continuous Integration with Jenkins
+title: Building Up Fineo's Continuous Integration with Jenkins
 location: San Francisco, CA
 tags: testing, aws, jenkins, spark, dynamodb, continuous integration, ci, lambda, pipelines
 ---
@@ -85,6 +85,10 @@ Each AWS end-to-end deployment is a Jenkins Pipeline job, which is itself kicked
 
 Jenkins Pipelines enable code-based definitions of jobs and can be incrementally added to existing installations. And they are _way better_ that chained scripts, once you get used to the DSL. By leveraging Cloudformation and some "templating of templates", you can create production-like deployments for comprehensive integration testing. With these tools, there is really no reason to not be setup an integrated, automated continuous integration tool that automatically promotes changes into production with high confidence.
 
+Want to learn more about the [Fineo] architecture? Check out the next (and final) post in the series: [Harder isn't Valuable: Looking Back on Fineo]
+
 [AWS Cloudformation]: https://aws.amazon.com/cloudformation/
 [Liquid]: https://shopify.github.io/liquid/
 [Jenkins]: https://jenkins.io/
+[Fineo]: http://fineo.io
+[Harder isn't Valuable: Looking Back on Fineo]: /2017/06/05/fineo-retro.html
