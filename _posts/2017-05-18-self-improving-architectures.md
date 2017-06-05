@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Interlude -  Self-Improving Architecture and Design
+title: "Interlude: Self-Improving Architecture and Design"
 tags: startup, design, architecture
 ---
 
