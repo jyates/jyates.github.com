@@ -1,7 +1,9 @@
 ---
 layout: post
-title: Hard isn't Valuable: Looking back on Fineo
+title: "Hard isn't Valuable: Looking back on Fineo"
+location: San Francisco, CA
 tags: startup, retrospective, fail, lessons, iot
+regenerate: true
 ---
 
 I've decided its time to wrap up Fineo. I took a shot for a while (nearly two years!), but I'm _way_ past my original time deadline to get traction and well out of (allocated) money. I've spent the last few weeks writing up some of the interesting architecture/design work I did, so at least there is some decent record. At the same time, I've been reading a bunch to understand _where and how_ I went awry.
@@ -30,7 +32,11 @@ Starting a company was something I'd always wanted to try and had saved money fo
 
 I looked around at the burgeoning IoT market and thought,
 
-    That's the next big data challenge. Surely what we were doing at Salesforce is applicable out there. Managing and leveraging all the data is certainly going to be hard.
+{% quote %}
+That's the next big data challenge.
+Surely what we were doing at Salesforce is applicable out there.
+Managing and leveraging all the data is certainly going to be hard.
+{% endquote %}
 
 So, I started working on an idea I had been percolating to build a fast SQL data analytics tool for streaming and scalable data. Certainly seemed challenging and a whole lot more interesting that what I was working on previously.
 
@@ -57,6 +63,8 @@ Basically, we were competing with a large amount of _non-consumption_. Major cor
 I also didn't focus on the IoT market - the platform background blinded me to just making a product that was tailor suited to the IoT/device needs. The emerging IoT market is still in the very nascent stages, where the winners are generally those who have an _integrated, high-performing solution_, rather than componentized architecture.
 
 <img src="/images/posts/fineo-retro/componentization.png">
+
+On the left, you generally are going to have the integrated companies that can move fast and deliver lots of end user value. On the right side, you have the componentized companies that are good at delivering incremental value powered by increasingly better components.
 
 With the fully integrated stack, companies can more quickly deliver a product that directly solves the customer problem. As they become more componentized, the integrated stack slows them down as they cannot compete across the standardized 'metrics of value' for the customer, forcing the architecture to become more componentized with stricter interfaces between components. This allows companies to more quickly replace components with higher performing ones. This is also the point where the main product becomes commoditized, and the value gets driven into the component makers (e.g. an analytics/database layer).
 
@@ -149,8 +157,12 @@ However, we are still looking at a relatively modular play, in an integrated mar
 
 But there is also a core problem in a data Platform-as-a-Service (PaaS) - few companies are willing to give their data to a startup. They can lose it, are probably likely to go down and might not even be around in 6 months.
 
-    It feels like everyone is racing to provide the shovels,
-    while there are relatively few people actually digging for gold
+{% highlight ruby %}
+
+It feels like everyone is racing to provide the shovels,
+while there are relatively few people actually digging for gold
+
+{% endhighlight %}
 
 The only people that can take that risk are startups themselves, but they are rarely going to need to scale benefits of Fineo that are so core to what we offered. So, why trust a startup when I could easily run MongoDB or Postgres for much of my data; at a bigger scale, I could turn to plenty of big companies (Samsung, AT&T, Google) that provide time-series database-as-a-service offerings.
 
@@ -187,7 +199,7 @@ I was looking an am emerging, disruptive technology (IoT) which was increasing t
 
 However, with an almost pathological avoidance of deep/wide customer conversations and a fundamental misunderstanding of the state of the industry, combined with a heaping amount of hubris, it was always an uphill battle.
 
-# In the end
+## In the end
 
 Nearly two years into Fineo, I've run out of network contacts for a potential co-founders and, frankly, am tired and pessimistic about the prospects for _another IoT platform_. The struggle to call it quits has been rough: I've spent much of the last 4 months in a deep depression (rivaled only by one or two other episodes in my, admittedly short, life), but am still convinced that what I was doing was _novel_ and _interesting_.
 
@@ -199,7 +211,7 @@ Unfortunately, generally only "lame" companies are using cool technology (i.e. a
 
 But if you are working on something that fits the 'worthwhile' and 'cool tech' stacks, I'd love to hear about it!
 
-## What's next?
+### What's next?
 
 For myself, I'm resolving to be more humble, more patient and more outgoing. The business side of things is definitely fun and something I'm going to be pursuing and reading about more more, but I doubt I'll move too far from the keyboard yet.
 
