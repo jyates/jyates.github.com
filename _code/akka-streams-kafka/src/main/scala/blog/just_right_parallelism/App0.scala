@@ -60,7 +60,7 @@ object App0 {
       }
       event
     })
-      // just grab back out our committable event
+      // just grab back out our original, committable event
       .filter(event => event._2 != null)
       .map(_._2)
       .map(_.committableOffset)
