@@ -70,27 +70,6 @@ task :stop do
 	end
 end
 
-
-desc "Start jekyll and refreshes the web page in Firefox"
-task :refresh => :build do
-	%x[
-		# Check if Firefox is running, if so refresh
-		ps -xc|grep -sqi firefox && osascript <<'APPLESCRIPT'
-			 tell app "Firefox" to activate
-			 tell app "System Events"
-					if UI elements enabled then
-						 keystroke "r" using command down
-						 -- Fails if System Preferences > Universal access > "Enable access for assistive devices" is not on 
-					--else
-						 --tell app "Firefox" to Get URL "JavaScript:window.location.reload();" inside window 1
-						 -- Fails if Firefox is set to open URLs from external apps in new tabs.
-					end if
-			 end tell
-		APPLESCRIPT 
-	]
-end
-
-
 def createPost(path, title)
 	File.open(path, "w") do |f|
 		f.puts "---"
