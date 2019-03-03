@@ -1,4 +1,7 @@
 _site
 Gemfile.lock
 server/
+# incremental rebuild
 .jekyll-metadata
+# rake auto-complete
+.rake_tasks~
