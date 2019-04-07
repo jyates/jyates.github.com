@@ -126,7 +126,7 @@ Now our downstream handling can actually be quite succinct _and_ lightning fast.
 
   def sendDownstream: Flow[Map[String, Object], Any, Any] = { ... }
 ```
-_You can [find the full code here](https://github.com/jyates/jyates.github.com/blob/master/_code/akka-streams-kafka/src/main/scala/blog/just_right_parallelism/App0.scala)_
+_You can [find the full code here](https://github.com/jyates/jyates.github.com/blob/master/_code/akka-streams-kafka/src/main/scala/blog/just_right_parallelism/App.scala)_
 
 Here we are changing our `sendDownstream` definition to a `Flow` - actually a much simpler to read approach! Now we get the expected parallelism when parsing a records and sending it downstream, ensuring that big records don't block the flow.
 
