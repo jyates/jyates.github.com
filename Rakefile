@@ -20,7 +20,6 @@ def getJekyllPid
 		pid = Integer(File.read(PID_FILE))
 		#if jekyll is alread running, then we are done
 		Process.getpgid( pid )
-		puts "Jekyll already running..."
 		return pid
 	else
 		throw Errno::ESRCH
@@ -50,6 +49,7 @@ task :build do
 			# Spawn a new process and run the rake command
       puts "Writing errors to #{ERR_FILE}"
 			pid = Process.spawn("jekyll server --incremental --watch --drafts", :out => '/dev/null', :err => ERR_FILE)
+			puts "Started with pid ", pid
 			f.puts pid
 			# Detach the spawned process
 			Process.detach pid
@@ -65,7 +65,8 @@ task :stop do
 		Process.kill("TERM", pid)
 		File.delete(PID_FILE)
 		puts "Killed jekyll"
-  rescue
+  rescue Exception => e
+    puts "\t#{e.backtrace.first}: #{e.message} (#{e.class})"
 		puts "Jekyll already stopped."
 	end
 end
