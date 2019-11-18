@@ -57,6 +57,14 @@ task :build do
 	end
 end
 
+desc "Get the stored pid on which jekyll should be running"
+task :pid do
+		pid = getJekyllPid()
+		puts "Jekyll expected on pid: \t#{pid}"
+		actual = `ps aux | grep jekyll | grep -v grep | awk '{print $2}'`
+		puts "Actually: \t\t\t#{actual}"
+end
+
 desc "Stop the jekyll server, if it is running already"
 task :stop do
 	begin
