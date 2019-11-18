@@ -1,12 +1,12 @@
 ---
 layout: post
-title: New Tooling: Building a Kafka Client Keystore
+title: "New (Open Source!) Tooling: Kafka Keystore Building"
 location: San Francisco, CA
 subtitle:
 tags: kafka, security, open source, java, rsa, x509, stream processing, big data
 ---
 
-The easiest way to setup basic authentication with Kafka is to use x509 certificates - you just get a private key signed by an authority and you are ready to sign requests with cryptographic proof of your identity. However, getting these certificates into a place where they are actually _usable_ by your Kafka client can be frustrating and error prone. That is why we recently released a [Kafka Certificates] tool to make your life easier.
+The easiest way to setup basic authentication with Kafka is to use x509 certificates. However, getting these certificates into a place where they are actually  by your Kafka client can be frustrating and error prone. That is why we recently released a [Kafka Certificates] tool to make your life easier.
 
 Most intro guides ([example](https://docs.confluent.io/3.0.0/kafka/ssl.html#creating-your-own-ca)) have you creating your own Certificate Authority (CA) to sign keys. This can work in the small scale, for instance with just one or two clusters and/or clients. However, when you start having proper "corporate infrastructure", chances are you will want to have a central CA for the entire company that can issue certs. These certs need not even be for Kafka exclusively - x509 certificates can be used to prove individuals' identity across a range of services.
 
