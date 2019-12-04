@@ -10,8 +10,18 @@ Problem Statement
  - large messages
  - custom formats
  
+Before even deciding on technologies, the first question we should ask is, "what kind of properties do I need from my 
+system", given the problem at hand. There are a number of things, but it seems like the key properties are:
+ - durable storage
+ - easy horizontal scalability
+ - high throughput AND low-latency
+
+The obvious choice here is Kafka - on top of fulfulling all of our requirements, it also is very stable, well supported
+and has a great community. Obviously, is it not going to solve all of problems out of the box, but as long as we are 
+careful in the design of the system around Kafka, we should be able to meet our needs for quite a while.
+ 
 Let's start with the how we would setup the system. In front of the messages we definitely need to put an API - 
-mananging authentication to Kafka directly for millions of unique devices alone would be headache enough, much less 
+managing authentication to Kafka directly for millions of unique devices alone would be headache enough, much less 
 trying to support the service protection we need. Great, now we have a place that we can do some simple routing and 
 management of the events.
 
