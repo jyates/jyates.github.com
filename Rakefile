@@ -43,6 +43,9 @@ task :build do
 	end
 	#if the process isn't started, start it	
 	unless started
+    # cleanup old site files
+    FileUtils.rm_rf('_site')
+
 		puts "Starting jeykll server http://0.0.0.0:4000/..." 
 		#Store the pid of jeykll server
 		File.open(PID_FILE, 'w+') do |f|

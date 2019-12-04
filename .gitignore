@@ -3,5 +3,6 @@ Gemfile.lock
 server/
 # incremental rebuild
 .jekyll-metadata
+.jekyll-cache
 # rake auto-complete
 .rake_tasks~
