@@ -9,7 +9,62 @@ Problem Statement
  - thundering herds
  - large messages
  - custom formats
+ 
+Let's start with the how we would setup the system. In front of the messages we definitely need to put an API - 
+mananging authentication to Kafka directly for millions of unique devices alone would be headache enough, much less 
+trying to support the service protection we need. Great, now we have a place that we can do some simple routing and 
+management of the events.
 
+<Device to API image>
+
+There are a couple of competing needs here; some messages are likely to be large, with lots of history to catch up, 
+while some are going to be very important and need to be durable and available quickly, and some are just business as
+ usual events. So, naturally, we need to have different mechanisms for processing each of them.
+ 
+However, we have a a bigger problem first. With a large number of devices, we are likely to get stampeding herds for 
+things like preferring to send data over wi-fi (which generally happens when people get home, which is generally right
+around the same time). Our first priority should probably be making sure we land that data and confirm the success to
+ the client so they avoid having to re-send the data.
+ To not 
+overwhelm any 
+single partition, while continuing to be able
+ to easily horizontally 
+scale the easiest thing to do is to have a relatively random partitioning. The simple choice of key here is the epoch
+ millisecond that the message was _received_, giving you a reasonably equal distribution of data over even a few 
+ seconds of events. The advantage here is that we are helping to ensure that (a) we land data as quickly as possible 
+ while (b) helping ease operational burden and growth. The obvious disadvantage is that if a device is sending us 
+ multiple messages, it might make sense to handle them on the same consumer, depending on what state we need. For 
+ now, we will assume the latter is not a problem for the parsing stage. However, you could potentially borrow some of
+  the partitioning ideas we will discuss later here if that is a challenge in your environment.
+
+Now let's look into the 'big message' problem. Anything over 20MB is going to start getting really challenging for 
+Kafka, especially in a shared cluster that also needs things like low latency. There are two main approaches we can 
+take here: chunking up the message into pieces and storing a 'message reference' in Kafka to an external store. There
+ are a number of posts written about each approach (1) (2) and even some projects to help us handle large messages 
+ (3). However, let's make life easy by taking the reference approach and assuming the messages are stored in S3. S3 
+ is particularly nice - beyond just reliability and being the defacto blob API,in case we want to move our 
+ implementation - as we can set a TTL on the bucket, so it will automatically cleanup messages that don't get 
+ delivered in failure cases. So now we have messages that come into our Kafka with a small wrapper, that includes the
+  data as well as some helpful things about the message:
+
+  ```
+  Message {
+    string device_id;
+    long arrival_time_millis;
+    optional string reference;
+    optional bytes body;
+  }
+  ```
+where our event key (used for partitioning) is again, just the `arrival_time_millis`.
+ 
+ 
+not 
+put the pressure on Kafka
+ and offload storage of the events to a remote store (you could also take a "chunking" approach to the   (1) (2).
+ 
+ (1) https://medium.com/workday-engineering/large-message-handling-with-kafka-chunking-vs-external-store-33b0fc4ccf14
+ (2) https://www.slideshare.net/JiangjieQin/handle-large-messages-in-apache-kafka-58692297
+ (3) https://github.com/linkedin/li-apache-kafka-clients
 Handling Scale and Herds
  - random partitioning key
    -  ensure that data lands
