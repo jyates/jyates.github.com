@@ -10,9 +10,9 @@ When scaling up Kafka consumers, particularly when dealing with a large number o
 topics you can run into some unexpected bottlenecks. They get even worse when dealing with geographically remote 
 clusters. The defaults will get you surprisingly far, but then you are left basically on your own.
 
-Well, No More! Let's dive right in. 
+Well, **No More!** Let's dive right in. 
 
-# A real life example
+# A real life(ish) example
 
 Let's say you are mirroring data from an edge Kafka cluster into a central Kafka cluster that will feed your 
 analytics data warehouse. You've setup the edge with 100+ partitions for many of the topics you are 
