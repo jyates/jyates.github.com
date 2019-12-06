@@ -171,14 +171,14 @@ the backend where we can be a little more leisurely and tolerant of things like 
 
 < slow lane api, slow lane re-direct image>
 
+It really all depends on what you determine your most important requirements are.
 
 ## High Priority Thunder
 
 Thundering herds can easily occur with circadian rhythms or when doing an Over-The-Air firmware update (if you aren't careful).
 However, in some cases the data being sent is absolutely critical to be received and then processed immediately. In that
-case we have two clear options: (a) send the data to a different endpoint that goes to a high-priority topic or (b) send the parsed
-data to a high priority topic JESSE: reword, this could be better. Essentially, in either case, we are creating a 'fast lane'
-for the important data. Similarly you would want to set your alerting more rigorously for this processing as well, so that you
+case we need to have a 'fast lane' for this data, either with a raw topic or a 'canonical' topic that re-directs from your
+ generic catch-all topic. Similarly you would want to set your alerting more rigorously for this processing as well, so that you
 never fall too far behind.
 
  - partitioning canonical to group by
@@ -193,10 +193,28 @@ never fall too far behind.
   - producer doesn't care about topic too much, it just sends records
  
 
-Looking forward
- - providing ownership to data owners to their own data flows
- - democratizing operational excellence
- - flow lineage and management
+## Looking forward
+
+We've talked about a number of different topic types, fast lanes and slow lanes, raw topic and canonical topics. 
+You can also mix and match any/all of these pieces to achieve your business goals and requirements. However, its also
+very easy, in the process, to build out a horribly complex set of data flows, where you get fan-out and fan-in, where you 
+build a system whose end-to-end SLOs are unreliable or impossible to calculate. Unfortunately, there is really no good, 
+readily available tools for managing all this complexity. I've built simple command-line tools to help developers visualize
+these flows, but they are a far cry from what we would want to make available to end users.
+
+Because at the end of the day, managing these data flows really shouldn't be the goal of the teams building out these tools
+and pipeline components. It's the end-users, whose firmware generates the events and the analysts who look at those events 
+that really need to be empowered to build and manage these pipelines. And let's be honest, these people don't want to deal
+with debugging, provisioning and scaling these pipelines out. That should be the province of the data teams.
+
+So now we have  this nice interface that really revolves around the idea of scaling operations. You let the 'external' 
+developers write code (in this case, often just a parser) and wire things together, while data pipelines team 
+manages scaling not only the software but really _scaling the operations_ of the pipelines. And that is really 
+where the power of the cloud lies; its about scaling the operations outside of the team to the rest of the organization.
+
+Which means that users get to dynamically manage their own data pipelines, while the pipelines team manages the operations
+to ensure that the primitives and components scale to a global fleet of IoT devices. Not an easy challenge, but one that I
+am certainly looking forward to.  
 
 # References
 
@@ -204,6 +222,8 @@ Looking forward
  (1) https://medium.com/workday-engineering/large-message-handling-with-kafka-chunking-vs-external-store-33b0fc4ccf14
  (2) https://www.slideshare.net/JiangjieQin/handle-large-messages-in-apache-kafka-58692297
  (3) https://github.com/linkedin/li-apache-kafka-clients
+
+-----
 
 # Things to include, if we have more space
  - schema evolution considerations, you probably want forward
