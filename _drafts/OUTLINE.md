@@ -46,7 +46,9 @@ do is to have a relatively random partitioning. The simple choice of key here is
 millisecond that the message was _received_, giving you a reasonably equal distribution of data over even a few 
 seconds of events. The advantage here is that we are helping to ensure that (a) we land data as quickly as possible 
 while (b) helping ease operational burden and growth - we can just add more partitions and continue to scale horizontally 
-without touching anything else in the system. The obvious disadvantage is that if a device is sending us 
+without touching anything else in the system.
+
+The obvious disadvantage is that if a device is sending us 
 multiple messages, it might make sense to handle them on the same consumer, depending on what state we need. For 
 now, we will assume the latter is not a problem for the parsing stage. However, you could potentially borrow some of
 the partitioning ideas we will discuss later here if that is a challenge in your environment.
@@ -54,16 +56,24 @@ the partitioning ideas we will discuss later here if that is a challenge in your
 ## Parsing
 
 Once we have our raw data, we need to make it usable. We could put the data directly into our databases or datalake, but 
-you instead probably want an intermediate format so that you can make that streaming data available to other teams
-across your organization. This also helps limit the complexity exposed to the rest of the organization as not everyone 
-needs to be able to run their own raw data parsing when they read of the raw topic, while also helping ensure the schema 
-in this parsed - "canonical" - topic remains backwards compatible and does not break consumers.
+you instead probably want an intermediate, "canonical" format of the data. Let's call this generic function from raw to
+canonical format the 'parser'. The output of the parser is a single interface for all downstream operations. That makes it 
+easier to build connectors to different backends. Additionally, limiting the functions of different tools allows you to limit
+the complexity of each component in your system and allowing you to build a allowing you to build a nicely composable
+stream processing framework. Its the Unix design philosophy, just applied at scale.
 
-In any large organization, you are likely going to get many new logical data streams from devices. Either new devices are
+< raw to parser to canonical to ? image >
+
+Another advantage of this canonical format is that you can make that streaming data available to other teams
+across your organization. This helps limit the complexity exposed to the rest of the organization; not everyone 
+needs to be able to run their own raw data parsing when they read of the raw topic, while also helping ensure the schema 
+in this parsed - "canonical" - topic remains backwards compatible and does not break consumers. 
+
+In any large organization, you are likely going to get regularly get many new data streams from devices. Either new devices are
 added or new sensors are added to existing product lines or even new data is collected from existing devices (e.g. they
 came equipped with hardware for which there was not firmware yet written to use and collect data on). 
 
-Approaches:
+There are a couple of approaches you can take to handle these new streams
  * one topic per stream type
  * one topic for all types, parse on the fly
  * one topic per device type (middle ground)
@@ -73,21 +83,31 @@ Approaches:
 In reality, you are likely to see a mix of the possible routes to parsing. Additionally, you are likely to see a mix of
 data formats (particularly if you have not transitioned to an enterprise-y "common data format"), which you will be responsible
 for turning into usable, canonical data. So you are faced with a choice, do you (a) try to support all the possible formats, or 
-(b) make the parsing pluggable. In the early days, you are likely more vertically integrated, so having the team handle
-parsing the single format, might actually make sense to own the parsing for a handful of topics. Even at scale, owning 
+(b) make the parsing pluggable. In the early days, you are likely more vertically integrated - having the team handle
+parsing the single or limited number of formats - so the team owns the parsing for a handful of topics. Even at scale, owning 
 some of the larger streams will help the team catch the corner cases and ensure the average case most people face works smoothly.
 
 However, owning all the possible parsing does not scale long term. Beyond the "core" streams the team owns, moving to a
-pluggable model is very helpful. 
+pluggable model allows you to scale and place the development & knowledge onus on the teams with a vested interest in
+the data. Basically, saying "If you want the data so bad, then you have all the tools you need to get it." 
 
 You can provide some standard parsers (JSON, CSV, etc) are often quick to spin up and will solve many team's problems out of the box,
-but definitely look at your common cases - and talk to your users! - before running off to implement standard tools. 
+but definitely look at your common cases - and talk to your users! - before running off to implement standard tools. At the
+same time, you will also likely start to have teams that produce server-side events on your platform as well. While the
+common denominator is often just JSON, there is rarely an excuse for server-side teams to _not_ produce schema-ful messages; 
+they have full control over all the message producers and there are libraries for the common formats in almost any
+language they could want.
 
-Formats and schema
- - provide simple interface to parsing
- - limit complexity exposed to users
- - avoid proliferation, focus on a couple of standard formats
-   - if you are producing server-side, rarely a reason to not have schemaful messages
+In a recent talk (4) I suggested a Parser interface like this:
+
+```
+parse(byte[]):: Iterator<Map<String, Object>>
+```
+
+You take in bytes (the message) and produce a number of events. It also has two failure modes - one that skips and one 
+that fails the message entirely (forcing the stream to retry). This is pretty close to as generic as
+you can make a Parser interface; data comes in, messages go out. It is also something that users a can easily understand
+and is surprisingly extensible, as we will see later.
 
 ## Large Messages
 
@@ -222,6 +242,7 @@ am certainly looking forward to.
  (1) https://medium.com/workday-engineering/large-message-handling-with-kafka-chunking-vs-external-store-33b0fc4ccf14
  (2) https://www.slideshare.net/JiangjieQin/handle-large-messages-in-apache-kafka-58692297
  (3) https://github.com/linkedin/li-apache-kafka-clients
+ (4) Kafka summit talk
 
 -----
 
