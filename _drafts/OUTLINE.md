@@ -281,14 +281,24 @@ fleet daily or 30% of the fleet daily. And if that percent drops off suddenly, y
 
 This is where the use of a 'metadata' stream is very powerful. Its built off the same raw stream that we used for the 
 standard parsing to canonical, but just tracks some basic things about the events without doing a full parse of each message.
+This could include things like device type, device UUID, firmware version, time received, source topic, message size and
+ maybe message start/end times. 
 
-
- - Meta consumer to a database/datawarehouse
-   - quick answers about the global state of devices, message statistics, etc, coverage
- - separate meta from parsing
- - parsing outputs an additional "complete" record
-  - producer doesn't care about topic too much, it just sends records
+Once you have this data you can do vey powerful queries helping you understanding the state of the fleet - how much
+of the fleet do we get data for in the last day, two days, week? What devices have we never gotten data or are chronically
+late? How big are the messages we are getting? How good is the compression we are getting in our custom data formats really?
+The list goes on.
  
+The key though, is that the metadata stream is primarily generated separately from the standard canonical event records from
+the messages. The work you are doing is much smaller, both in terms of CPU and data generated, so it relatively cheap to
+add, but also makes answering your big questions fast and cheap too. For instance, determining the relative coverage for
+every device in your fleet could mean scanning petabytes to just find a couple of devices, but the metadata could often just
+be tens of gigabytes for a large fleet over many years.
+
+< raw to canonical and metadata >
+
+ - parsing outputs an additional "complete" record
+  - producer doesn't care about topic too much, it just sends records 
 
 ## Looking forward
 
@@ -320,7 +330,8 @@ am certainly looking forward to.
  (2) https://www.slideshare.net/JiangjieQin/handle-large-messages-in-apache-kafka-58692297
  (3) https://github.com/linkedin/li-apache-kafka-clients
  (4) Kafka summit talk
- (5) https://github.com/lyft/amundsen
+ (5) https://www.confluent.io/blog/okay-store-data-apache-kafka/
+ (6) https://github.com/lyft/amundsen
 
 -----
 
