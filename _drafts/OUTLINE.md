@@ -286,8 +286,7 @@ This could include things like device type, device UUID, firmware version, time 
 
 Once you have this data you can do vey powerful queries helping you understanding the state of the fleet - how much
 of the fleet do we get data for in the last day, two days, week? What devices have we never gotten data or are chronically
-late? How big are the messages we are getting? How good is the compression we are getting in our custom data formats really?
-The list goes on.
+late? How big are the messages we are getting? The list goes on.
  
 The key though, is that the metadata stream is primarily generated separately from the standard canonical event records from
 the messages. The work you are doing is much smaller, both in terms of CPU and data generated, so it relatively cheap to
@@ -297,8 +296,27 @@ be tens of gigabytes for a large fleet over many years.
 
 < raw to canonical and metadata >
 
- - parsing outputs an additional "complete" record
-  - producer doesn't care about topic too much, it just sends records 
+Notice, I said, the metadata stream should be primarily separate, not entirely separate. We have a nice opportunity in the
+raw to canonical parsing step to output some additional metadata metrics about the message that could help enrich our 
+understanding of the fleet and the data we are getting. Some of the things we could track include number of events parsed,
+time to parse, and if the parsing was successful. 
+
+< raw to canonical/meta, raw to metadata >
+
+
+What is neat about the Kafka producer is that it doesn't get pinned to one destination topic - you can give is messages for 
+multiple topics and it will happy pass them along. And since our metadata about the record is relatively small compared
+to the event stream, it is approximately free for us to add this additional metadata about the parsing itself. However,
+this small amount of additional metadata can be very impactful. Now you can answer questions of the quality of the data
+being sent from the devices - how often is it well-formed, how good is the custom format's compression in practice? It 
+can also inform things like the amount of parallelism you want to employ for large messages because you can understand in
+real time how long are you spending parsing per message and then make informed decisions around throughput vs. data
+duplication during restarts.
+
+All in all, metadata streams is a powerful tool help you understand how your fleet and how your stream processing is 
+operating, for relatively cheap. It doesn't cost you a lot of data storage or CPU for processing. You do pay an operational
+overhead for managing an additional stream, but I would argue you get that back in spades from operational gains for the
+fleet and understanding the stream itself.   
 
 ## Looking forward
 
