@@ -273,6 +273,16 @@ are also the ones most susceptible to the thundering herd risks.
 
 ## Fleet Management
 
+When you have a large fleet of devices to manage and analyse, it becomes important to understand how much of the fleet you
+are really getting for any given day. Depending on circadian herding or firmware configurations, you could see 90% of the 
+fleet daily or 30% of the fleet daily. And if that percent drops off suddenly, you will want to know that too.
+
+< long tail 90% or long tail 35% >
+
+This is where the use of a 'metadata' stream is very powerful. Its built off the same raw stream that we used for the 
+standard parsing to canonical, but just tracks some basic things about the events without doing a full parse of each message.
+
+
  - Meta consumer to a database/datawarehouse
    - quick answers about the global state of devices, message statistics, etc, coverage
  - separate meta from parsing
@@ -286,7 +296,7 @@ We've talked about a number of different topic types, fast lanes and slow lanes,
 You can also mix and match any/all of these pieces to achieve your business goals and requirements. However, its also
 very easy, in the process, to build out a horribly complex set of data flows, where you get fan-out and fan-in, where you 
 build a system whose end-to-end SLOs are unreliable or impossible to calculate. Unfortunately, there is really no good, 
-readily available tools for managing all this complexity. I've built simple command-line tools to help developers visualize
+readily available tools for managing all this complexity (Amundesn (5) looks like a promising start). I've built simple command-line tools to help developers visualize
 these flows, but they are a far cry from what we would want to make available to end users.
 
 Because at the end of the day, managing these data flows really shouldn't be the goal of the teams building out these tools
@@ -310,6 +320,7 @@ am certainly looking forward to.
  (2) https://www.slideshare.net/JiangjieQin/handle-large-messages-in-apache-kafka-58692297
  (3) https://github.com/linkedin/li-apache-kafka-clients
  (4) Kafka summit talk
+ (5) https://github.com/lyft/amundsen
 
 -----
 
