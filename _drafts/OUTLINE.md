@@ -1,15 +1,32 @@
-# Confluent Post: IoT Challenges and Techniques
+# Confluent Post: IoT Challenges and Techniques in Stream Processing
 
 ## Problem
-An overview of some of the common IoT processing challenges and then some techniques that you can apply to your problem.
 
-Problem Statement
- - large number of devices
- - (some) low latency needs
- - NO data loss - every message counts
- - thundering herds
- - large messages
- - custom formats
+At a far enough remove, dealing with IoT data looks a lot like any other data problem - you have events being generated,
+some times at high volumes, that need to be processed and either made available to downstream consumers or stored in 
+databases. However, once you dig into the details you will see that you have all those problems and then many more. Now,
+you have a large number of devices that have variable connectivity and a long tail of firmware versions, meaning you
+can't just stop supporting some versions. At the same time, some of these devices can go 'insane' and start dumping piles
+of data on your infrastructure, making it feel like a Denial-of-Service attack; with that long tail of devices, this DOS
+starts to be come part of the business process and needs to be designed for up-front. 
+
+Unfortunately, it gets even worse. Some of your data streams could be high priority - especially if you have devices that
+are at all medical or health & safety related - mixed in with streams that are just high volume 'normal operations' information
+used by analysts for understanding fleet health. Often times, these streams are also coming in different formats, which
+independently evolve on their own; as a stream processing focused team, you probably also don't have control over where or
+when those changes happen. And the data formats on devices are not likely to be nice formats like Avro or Protobuf, either
+because of CPU requirements or desire to have more dense storage and transmission of data; hopefully they do continue to 
+support at least versioning, if not compatibility guarantees.
+
+This is just a smattering of some of the challenges you encounter dealing with IoT devices. Beyond that, you will also 
+need to add some basic fleet management and overview functionality. Since not all devices are regularly connected and can
+have interesting bugs in firmware - 1 in a million is a daily problem at scale - you also need to build out data streams
+just to understand the metadata about the state of your fleet of devices; whether the devices are healthy, reporting data,
+creating weirdly large messages from being disconnected, etc. 
+
+Taken all together, this is feel like an unsurmountable challenge. Fortunately, if you are facing some or all of these
+kinds of problems, we have some techniques and approaches that can point you in the right direction on the climb up the
+mount.
  
 ## Basic Design
 
@@ -108,6 +125,23 @@ You take in bytes (the message) and produce a number of events. It also has two 
 that fails the message entirely (forcing the stream to retry). This is pretty close to as generic as
 you can make a Parser interface; data comes in, messages go out. It is also something that users a can easily understand
 and is surprisingly extensible, as we will see later.
+
+By making the interface available to others you can start to bring some sanity to what the stream processing team manages
+and what the firmware developers (that generate the events) have to worry about. Now, as the firmware wants to evolve
+the data formats or add new streams, they have more power to control their own destiny and now wait on the ingest team
+to write and roll out new code. Of course, their starts to be a dance around if the code should continue to support older
+versions or if it is just easier to spin up a new topic and new parser for the changed data format.
+
+Remember, we have that long tail of devices so we still likely need to keep the old format around for quite a while; devices
+can easily be online sending data but not get firmware updates, for many reasons. So now you have the operational complexity
+of having to manage new streams. You also have the headaches of orchestrating a cut-over in the streams. Here it can get a
+bit hairy because the backend infrastructure teams would generally prefer a nice staggered rollout, maybe 10% at a time, 
+that allows them to scale up hardware resources as needed (or just Kubernetes pods, but same idea) while scaling down
+the old pipelines and watching for anomalies. However, your firmware releases are likely to include other changes - 
+functionality upgrades, etc - that can have "interesting" effects and be controlled by existing rollout schedules. Here is
+important that the stream processing teams be intimately tied into this process (particularly for large changes), as it 
+can affect not only the stream being scaled, but also the existing pipelines and thus, really, all the data the company
+is getting from devices.
 
 ## Large Messages
 
