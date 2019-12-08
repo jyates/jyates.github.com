@@ -232,11 +232,44 @@ It really all depends on what you determine your most important requirements are
 Thundering herds can easily occur with circadian rhythms or when doing an Over-The-Air firmware update (if you aren't careful).
 However, in some cases the data being sent is absolutely critical to be received and then processed immediately. In that
 case we need to have a 'fast lane' for this data, either with a raw topic or a 'canonical' topic that re-directs from your
- generic catch-all topic. Similarly you would want to set your alerting more rigorously for this processing as well, so that you
+generic catch-all topic. Similarly you would want to set your alerting more rigorously for this processing as well, so that you
 never fall too far behind.
 
- - partitioning canonical to group by
-   - time bucket, UUID bucket
+< fast lane image >
+
+However, you might have a competing need from your backend that data from devices be somewhat contiguous. This can
+help when, say writing to a database and not wanting to spray writes from each consumer to all of your shards. That means
+we need to organize our canonical topics a bit more intelligently. For some of the streams you could probably get away
+with just using a relatively even event distribution on something like the `event_millisecond`. Once passed through
+Kafka's partition hashing, it is very unlikely to see anything but approximately the same number of messages per-partition,
+even if the one device does go 'insane', it is still likely (hopefully!) to produce an event stream with an increasing
+event time.
+
+But we were talking about the case where you _can't_ just use the event time, and need to be a bit smarter. A simple approach
+to get contiguous event streams is to just partition on devices' UUID. This ensures that the data for one device always
+ends up going to the same partition and, retries and restarts aside, in the same order it came in as. This can make life
+very easy for downstream consumers.
+
+At the same time, it can also make life positively horrible when you get stampeding herds of a handful of devices. This
+could be a normal business operation, like devices getting sync'd on circadian rhythms and only sending data on wifi (e.g.
+when people get home). Alternatively, it could be a sort of 'last gasp' before the device fails to ensure that all the
+diagnostic information necessary is available, but that could easily be a big flood. Either way, a consistent UUID based
+partitioning scheme is unlikely to succeed, especially with smaller fleets of devices. That said, it can work with large fleets,
+but this often needs to be in the millions before it is viable and you are going to see the same problems with rollouts, new
+data streams and new device types, so we can't count on sheer scale here to smooth out our canonical topics.
+
+Stepping back, either for money saving or efficiency reasons devices are unlikely to be constantly connected and sending
+ a stream of events. That means you are going to see discretized event windows per message. So we can map these chunks into
+ time windows that are convenient for our storage system. Now our canonical topic's partition key can be something like UUID + `time_bucket`, where
+ the bucket is dynamically generated from the event time.
+ 
+< wrapper (not the system time) -> event blob -> event + timestamp -> this timestamp >
+
+< mapping timestamp to hourly time buckets> 
+
+Now when we read from the canonical topics, we continue to get devices' data grouped together for large swathes of time,
+but avoid the risk of DOS-like data floods. This can be incredibly useful for streams that have to be processed quickly, but
+are also the ones most susceptible to the thundering herd risks.
 
 ## Fleet Management
 
