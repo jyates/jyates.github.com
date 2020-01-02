@@ -6,12 +6,12 @@ subtitle:
 tags: kafka, streaming, stream processing, big data
 ---
 
-After my "Scaling a Kafka Consumer" post, it only seemed fair to take a dive into the producer side of the world too. It's got 
-it's own set of problems and tuning fun that we can dive into.
+After my [Scaling a Kafka Consumer] post, it only seemed fair to take a dive into the producer side of the world too.
+ It's got it's own set of problems and tuning fun that we can dive into.
 
 # The setup
 
-Let's assume that you already have a [Kafka] Producer running, but its just not quite keeping up
+Let's assume that you already have a [Kafka] producer running, but its just not quite keeping up
 with the data flowing through. This already means you are in the 95th percentile of users - 
 generally the default client configurations are more than enough to work.
 
@@ -142,4 +142,4 @@ A summary of the configurations and metrics to tweak on the client:
 Do you have any more suggestions? Drop a note in the comments below!
 
 [Kafka]: http://kafka.apache.org
-[Scaling a Kafka Consumer]: TODO
+[Scaling a Kafka Consumer]: http://jesseyates.com/2019/12/04/vertically-scaling-kafka-consumers.html
